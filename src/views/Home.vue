@@ -1,18 +1,2195 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+
+    <v-layout row align-center justify-space-between class="top">
+      <v-flex class="flex-auto">
+        <img class="logo" src="@/assets/logo.png" alt="">
+      </v-flex>
+      <v-spacer></v-spacer>
+      <v-flex class="search flex-auto">
+          <v-autocomplete
+                v-model="Hero"
+                :items="marks"
+                box
+                dark
+                prepend-icon="search"
+                clearable
+                color="blue-grey lighten-2"
+                label="Search Heros"
+                item-text="Hero"
+                item-value="Hero"
+                @change="blurField($event)"
+              >
+                <template
+                  slot="selection"
+                  slot-scope="data"
+                >
+                    <v-avatar>
+                      <img :src="data.item.avatar">
+                    </v-avatar>
+                    {{ data.item.Hero }}
+                </template>
+                <template
+                  slot="item"
+                  slot-scope="data"
+                >
+                  <template v-if="typeof data.item !== 'object'">
+                    <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                  </template>
+                  <template v-else>
+                    <v-list-tile-avatar>
+                      <!-- <img :src="data.item.avatar"> -->
+                      AVA
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title v-html="data.item.Hero"></v-list-tile-title>
+                      <v-list-tile-sub-title v-html="data.item.Class"></v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </template>
+                </template>
+              </v-autocomplete>
+      </v-flex>
+    </v-layout>
+
+    <v-layout class="filters" row>
+
+
+      <v-flex xs3>
+        <v-autocomplete
+              v-model="Faction"
+              :items="FactionList"
+              dark
+              clearable
+              color="blue-grey lighten-2"
+              label="Faction"
+              item-text="Faction"
+              item-value="Faction"
+              @change="blurField($event)"
+            >
+              <template
+                slot="selection"
+                slot-scope="data"
+                @input="data.parent.selectItem(data.item)"
+              >
+                  <v-avatar>
+                    <img :src="require(`@/assets/factions/Icon_Faction_${data.item}.png`)">
+                  </v-avatar>
+                  {{ data.item | swapSpace}}
+              </template>
+
+              <template
+                slot="item"
+                slot-scope="data"
+              >
+                <template v-if="typeof data.item !== 'object'">
+                  <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                </template>
+                <template v-else>
+                  <v-list-tile-avatar>
+                    <img :src="require(`@/assets/factions/Icon_Faction_${data.item.Faction}.png`)">
+                  </v-list-tile-avatar>
+                  <v-list-tile-content>
+                    <v-list-tile-title>{{data.item.Faction | swapSpace }}</v-list-tile-title>
+                    <v-list-tile-sub-title v-html="data.item.Faction"></v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </template>
+              </template>
+            </v-autocomplete>
+      </v-flex>
+      <v-flex xs3>
+        <v-autocomplete
+              v-model="Role"
+              :items="RoleList"
+              dark
+              clearable
+              color="blue-grey lighten-2"
+              label="Role"
+              item-text="Role"
+              item-value="Role"
+              @change="blurField($event)"
+            >
+              <template
+                slot="selection"
+                slot-scope="data"
+              >
+                  <v-avatar>
+                    <img :src="'@/assets/roles/Icon_Role_/'+data.item.Role">
+                  </v-avatar>
+                  {{ data.item.Role }}
+              </template>
+              <template
+                slot="item"
+                slot-scope="data"
+              >
+                <template v-if="typeof data.item !== 'object'">
+                  <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                </template>
+                <template v-else>
+                  <v-list-tile-avatar>
+                    <img :src="'@/assets/roles/Icon_Role_/'+data.item.Role">
+                  </v-list-tile-avatar>
+                  <v-list-tile-content>
+                    <v-list-tile-title v-html="data.item.Role"></v-list-tile-title>
+                    <v-list-tile-sub-title v-html="data.item.Role"></v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </template>
+              </template>
+            </v-autocomplete>
+      </v-flex>
+      <v-flex xs3>
+        <v-autocomplete
+              v-model="Campaign"
+              :items="RoleList"
+              dark
+              clearable
+              color="blue-grey lighten-2"
+              label="Heros"
+              item-text="Class"
+              item-value="Class"
+              @change="blurField($event)"
+            >
+              <template
+                slot="selection"
+                slot-scope="data"
+              >
+                  <v-avatar>
+                    <img :src="'@/assets/factions/Icon_Factions_/'+data.item.Faction">
+                  </v-avatar>
+                  {{ data.item.Class }}
+              </template>
+              <template
+                slot="item"
+                slot-scope="data"
+              >
+                <template v-if="typeof data.item !== 'object'">
+                  <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                </template>
+                <template v-else>
+                  <v-list-tile-avatar>
+                    <!-- <img :src="data.item.avatar"> -->
+                    AVA
+                  </v-list-tile-avatar>
+                  <v-list-tile-content>
+                    <v-list-tile-title v-html="data.item.Class"></v-list-tile-title>
+                    <v-list-tile-sub-title v-html="data.item.Class"></v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </template>
+              </template>
+            </v-autocomplete>
+      </v-flex>
+    </v-layout>
+
+    <!-- <v-btn @click="uploadData">Upload</v-btn>
+    marks:{{marks}} -->
+    <v-layout class="marks" row wrap v-if="marks != undefined && marks.length > 0">
+      <v-flex xs4 v-for="(mark, index) in filteredMarks" :key="index">{{mark.Hero}}</v-flex>
+    </v-layout>
+
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+// import HelloWorld from '@/components/HelloWorld.vue'
+import { db } from '@/main'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    // HelloWorld
+  },
+  data (){
+    return{
+      markData:[
+        {
+         "Hero": "Abaddon",
+         "Role": "Boss",
+         "Faction": "Demons",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "X?",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "O",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "O",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Burning of Souls",
+         "Skill Level Required": 3,
+         "Hero Lvl Required": 10,
+         "Equipment Lvl Required": 2,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"},
+        {
+         "Hero": "Abyss Hound",
+         "Role": "Melee",
+         "Faction": "Demons",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "O",
+         "Ranged": "X",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "O",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Assassin of the Abyss",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Akhrasht",
+         "Role": "Tank",
+         "Faction": "Ra'Archne",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "O",
+         "Melee": "",
+         "Ranged": "X",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "O",
+         "Skill":{
+         "Skill Name": "Chitin Shield",
+         "Skill Level Required": 4,
+         "Hero Lvl Required": 20,
+         "Equipment Lvl Required": 3,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Ambror",
+         "Role": "Ranged",
+         "Faction": "Dwarves",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "X",
+         "Ranged": "O",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "O",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Dwarf Bolt",
+         "Skill Level Required": 4,
+         "Hero Lvl Required": 20,
+         "Equipment Lvl Required": 3,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Angrim",
+         "Role": "Melee",
+         "Faction": "Dwarves",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "O",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "X",
+         "Dwarf": "O",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Berserker Rage",
+         "Skill Level Required": 4,
+         "Hero Lvl Required": 20,
+         "Equipment Lvl Required": 3,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Aratar",
+         "Role": "Melee",
+         "Faction": "Barbarians",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "O",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "O",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Arekhon Axe",
+         "Role": "Ranged",
+         "Faction": "Arekon Undead",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "O",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "O",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Arekhon Guard",
+         "Role": "Tank",
+         "Faction": "Arekon Undead",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "O",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "X",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Arekhon Battle Cry",
+         "Skill Level Required": 6,
+         "Hero Lvl Required": 40,
+         "Equipment Lvl Required": 5,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Arekhon Shadow",
+         "Role": "Rogue",
+         "Faction": "Arekon Undead",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": " ",
+         "Rogue": "XO",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "O",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Shadow Judgement",
+         "Skill Level Required": 4,
+         "Hero Lvl Required": 20,
+         "Equipment Lvl Required": 3,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Arekhon Spear",
+         "Role": "Melee",
+         "Faction": "Arekon Undead",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "O",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "O",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Atiles",
+         "Role": "Tank",
+         "Faction": "Barbarians",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "O",
+         "Melee": "X",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "O",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Arc of Steel",
+         "Skill Level Required": 4,
+         "Hero Lvl Required": 20,
+         "Equipment Lvl Required": 3,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Azariel",
+         "Role": "Healer ",
+         "Faction": "Dark Elves",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": " ",
+         "Healer": "O",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Bellara",
+         "Role": "Caster",
+         "Faction": "Barbarians",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": " ",
+         "Caster": "O",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": " ",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Swamp Curse",
+         "Skill Level Required": 6,
+         "Hero Lvl Required": 40,
+         "Equipment Lvl Required": 5,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Blood Emperor",
+         "Role": "Boss",
+         "Faction": "Arekon Undead",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "O",
+         "Dwarf": "",
+         "Arekhon": "O",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Mark of Arekhon",
+         "Skill Level Required": 4,
+         "Hero Lvl Required": 20,
+         "Equipment Lvl Required": 3,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Blood Mage",
+         "Role": "Caster",
+         "Faction": "Arekon Undead",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": " ",
+         "Caster": "O",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "X",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Rivers of Blood",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Blood Priest",
+         "Role": "Healer ",
+         "Faction": "Arekon Undead",
+         "Campaign": "Dark",
+         "Removal": "Removes Friendly",
+         "Tank": "X",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": " ",
+         "Healer": "O",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Cry of the Void",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Cathbad",
+         "Role": "Healer ",
+         "Faction": "Druids",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "O",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Denaya",
+         "Role": "Boss",
+         "Faction": "Barbarians",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "O",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "X",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Red Fury",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Dreverad",
+         "Role": "Tank",
+         "Faction": "Druids",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "O",
+         "Melee": "X",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "X?",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Eraser",
+         "Role": "Caster",
+         "Faction": "Demons",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "X",
+         "Caster": "O",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Dark Flame",
+         "Skill Level Required": 4,
+         "Hero Lvl Required": 20,
+         "Equipment Lvl Required": 3,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Eraser",
+         "Role": "Caster",
+         "Faction": "Demons",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "X",
+         "Caster": "O",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Dark Weakness",
+         "Skill Level Required": 6,
+         "Hero Lvl Required": 40,
+         "Equipment Lvl Required": 5,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Gassar",
+         "Role": "Rogue",
+         "Faction": "Dwarves",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "O",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "X",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Wild Fire",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Gatekeeper",
+         "Role": "Tank",
+         "Faction": "Demons",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "O",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "X",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Rage of the Abyss",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Grok",
+         "Role": "Tank",
+         "Faction": "Kobolds",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "O",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "X",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Enraging Strike",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Hargrim",
+         "Role": "Healer ",
+         "Faction": "Dwarves",
+         "Campaign": "Light",
+         "Removal": "Removes Friendly",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "O",
+         "Boss": "",
+         "Dwarf": "O",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Hilia",
+         "Role": "Healer ",
+         "Faction": "Ra'Archne",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "O",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "X",
+         "Skill":{
+         "Skill Name": "Mimicry",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Infernus",
+         "Role": "Ranged",
+         "Faction": "Demons",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "O",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Jagg",
+         "Role": "Melee",
+         "Faction": "Kobolds",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "O",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "O",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Kage",
+         "Role": "Rogue",
+         "Faction": "Elves",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "O?",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "X?",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Kharannah",
+         "Role": "Healer ",
+         "Faction": "Dragonkin",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "O",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "X",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Healing Light",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Khshaat",
+         "Role": "Caster",
+         "Faction": "Ra'Archne",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "O",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": " ",
+         "Skill":{
+         "Skill Name": "Ra'Archne Taboo",
+         "Skill Level Required": 6,
+         "Hero Lvl Required": 40,
+         "Equipment Lvl Required": 5,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Kobolock",
+         "Role": "Healer ",
+         "Faction": "Kobolds",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "O",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "X",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Drink Poison!",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Last Guardian",
+         "Role": "Boss",
+         "Faction": "",
+         "Campaign": "",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "XO?",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Lucky",
+         "Role": "Healer ",
+         "Faction": "Shaggy Pygmies",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "O",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Maedb",
+         "Role": "Rogue",
+         "Faction": "Druids",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "X",
+         "Ranged": "",
+         "Rogue": "O",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Myrddin",
+         "Role": "Caster",
+         "Faction": "Druids",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "O",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "O",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Ra'Archne Queen",
+         "Role": "Boss",
+         "Faction": "Ra'Archne",
+         "Campaign": "Dark",
+         "Removal": "Removes Self",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "O",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Raarspit",
+         "Role": "Ranged",
+         "Faction": "Ra'Archne",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "O",
+         "Rogue": " X",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "O",
+         "Skill":{
+         "Skill Name": "Poison Squirt",
+         "Skill Level Required": 6,
+         "Hero Lvl Required": 40,
+         "Equipment Lvl Required": 5,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Rizer",
+         "Role": "Rogue",
+         "Faction": "Ra'Archne",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "O",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "O",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Rogar",
+         "Role": "Tank",
+         "Faction": "Dragonkin",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "O",
+         "Melee": "X",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "O",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Bastion of Faith",
+         "Skill Level Required": 4,
+         "Hero Lvl Required": 20,
+         "Equipment Lvl Required": 3,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Rok",
+         "Role": "Caster",
+         "Faction": "Beastmen",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "O",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "X",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Frost Spike",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Roland",
+         "Role": "Boss",
+         "Faction": "Knights of the Council",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "O",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Sandariel",
+         "Role": "Boss",
+         "Faction": "Wild Elves",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "O",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Seven Knives",
+         "Role": "Ranged",
+         "Faction": "Barbarians",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "O",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "O",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Knife Throw",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Sharazar",
+         "Role": "Rogue",
+         "Faction": "Changelings",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "O",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Shni",
+         "Role": "Rogue",
+         "Faction": "Kobolds",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "XO",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "O",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Kobold Camouflage",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Silver Moon",
+         "Role": "Healer ",
+         "Faction": "Barbarians",
+         "Campaign": "Light",
+         "Removal": "Removes Friendly",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "O",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Soothsayer",
+         "Role": "Caster",
+         "Faction": "Kobolds",
+         "Campaign": "Dark",
+         "Removal": "Removes Kobold",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "O",
+         "Healer": "X",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": " ",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Anger of Flies",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Succubus",
+         "Role": "Rogue",
+         "Faction": "Demons",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "O",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "O",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Swamp Killer",
+         "Role": "Rogue",
+         "Faction": "Barbarians",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "XO",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "O",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Killer Strike",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Tahit",
+         "Role": "Melee",
+         "Faction": "Ra'Archne",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "O",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "X",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "O",
+         "Skill":{
+         "Skill Name": "Flurry of Spikes",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Taneda",
+         "Role": "Melee",
+         "Faction": "Elves",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "O",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "X",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "O",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Way of the Sword",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Torak",
+         "Role": "Ranged",
+         "Faction": "Kobolds",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "O",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "O",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Troddar",
+         "Role": "Tank",
+         "Faction": "Dwarves",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "O",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "O",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Trorin",
+         "Role": "Boss",
+         "Faction": "Dwarves",
+         "Campaign": "Light",
+         "Removal": "Removes Friendly?",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "O",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Tsuna",
+         "Role": "Rogue",
+         "Faction": "Beastmen",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "O",
+         "Caster": "",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "O",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Velundar",
+         "Role": "Caster",
+         "Faction": "Dwarves",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "X",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "O",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "X",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Curse Rune",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Velundar",
+         "Role": "Caster",
+         "Faction": "Dwarves",
+         "Campaign": "Light",
+         "Removal": "",
+         "Tank": "X",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "O",
+         "Healer": "",
+         "Boss": "",
+         "Dwarf": "X",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "Earthquake Rune",
+         "Skill Level Required": 5,
+         "Hero Lvl Required": 30,
+         "Equipment Lvl Required": 4,
+         },
+         "Faction Mark": "V",
+         "Role Mark": ""
+        },
+        {
+         "Hero": "Wyrm Priest",
+         "Role": "Boss",
+         "Faction": "Kobolds",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "X",
+         "Healer": "",
+         "Boss": "O",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "O",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "THE WYRM",
+         "Skill Level Required": 4,
+         "Hero Lvl Required": 20,
+         "Equipment Lvl Required": 3,
+         },
+         "Faction Mark": "",
+         "Role Mark": "V"
+        },
+        {
+         "Hero": "Xaart",
+         "Role": "Healer ",
+         "Faction": "Demons",
+         "Campaign": "Dark",
+         "Removal": "",
+         "Tank": "",
+         "Melee": "",
+         "Ranged": "",
+         "Rogue": "",
+         "Caster": "",
+         "Healer": "O",
+         "Boss": "",
+         "Dwarf": "",
+         "Arekhon": "",
+         "Barbarians": "",
+         "Beastmen": "",
+         "Demons": "",
+         "Dragonkin": "",
+         "Druids": "",
+         "Elves": "",
+         "Kobolds": "",
+         "Ra'Archne": "",
+         "Skill":{
+         "Skill Name": "",
+         "Skill Level Required": null,
+         "Hero Lvl Required": null,
+         "Equipment Lvl Required": null,
+         },
+         "Faction Mark": "",
+         "Role Mark": ""
+        }
+      ],
+  marks: [],
+  //filters
+  Role: "",
+  RoleList:['Tank','Melee',	'Ranged',	'Rogue',	'Caster',	'Healer', 'Boss'],
+  Campaign:"",
+  CampaignList:['Light', 'Dark'],
+  Hero: "",
+  Faction: "",
+  FactionList:['Arekon_Undead','Barbarians','Beastmen','Changelings', 'Dark_Elves', 'Demons', 'Dragonkin','Druids','Dwarves', 'Elves','Knights_of_the_Council', 'Kobolds',"Ra'Archne", "Shaggy Pygmies", "Wild_Elves"],
+
+}},
+methods:{
+  uploadData(){
+    for (var i = 0; i < this.markData.length; i++) {
+      db.collection('marks').add(this.markData[i])
+    }
+  },
+  blurField(e){
+    console.log(e);
+    // return e.replace(/_/g, " ")
+  },
+},
+computed: {
+  filteredMarks () {
+    const { Hero, Faction, Role, Campaign, marks } = this
+    console.log();
+    return this.marks
+      .filter(mark => mark.Hero.toLowerCase().indexOf(Hero.toLowerCase()) > -1)
+      .filter(mark => mark[Faction] != '')
+      .filter(mark => mark[Role] != '')
+      .filter(mark => mark[Campaign] != '')
+    },
+},
+filters:{
+  swapSpace: function(e){
+    console.log('e',e);
+    return e.replace(/_/g, " ")
   }
+},
+firestore () {
+  return {
+    marks: db.collection('marks').orderBy('Hero')
+  }
+},
 }
 </script>
+
+<style lang="scss">
+.flex-auto{
+  flex:0 1 auto!important;
+}
+
+.top{
+  img.logo{
+    margin-top: 10px;
+    margin-left: 20px;
+    max-width: 120px;
+  }
+  .v-text-field__details{
+    display: none!important;
+  }
+  .v-input__slot{
+    margin: 0!important;
+  }
+}
+.filters{
+  // background: #fff;
+}
+  .marks{
+    color: #fff;
+  }
+</style>
