@@ -10,7 +10,7 @@
           <v-autocomplete
                 v-model="Hero"
                 :items="marks"
-                box
+                outline
                 dark
                 prepend-icon="search"
                 clearable
@@ -49,135 +49,109 @@
                 </template>
               </v-autocomplete>
       </v-flex>
+
+      <v-flex>
+        <v-layout class="filters" row>
+
+          <v-flex xs3>
+            <!-- <span style="color:white">{{noFactionIcon.includes('Arekhon_Undead')}}</span> -->
+            <v-autocomplete
+                  v-model="Faction"
+                  :items="FactionList"
+                  dark
+                  clearable
+                  color="blue-grey lighten-2"
+                  label="Faction"
+                  item-text="Faction"
+                  item-value="Faction"
+                  @change="blurField($event)"
+                >
+                  <template
+                    slot="selection"
+                    slot-scope="data"
+                    @input="data.parent.selectItem(data.item)"
+                  >
+                      <v-avatar :color="checkIcon(data.item) ? 'grey': null">
+                        <img v-if="!checkIcon(data.item)" :src="require(`@/assets/factions/Icon_Faction_${data.item}.png`)">
+                        <strong class="white--text headline" v-if="checkIcon(data.item)">F</strong>
+                      </v-avatar>
+                      <span class="selectText">
+                        {{ data.item | swapSpace}}
+                      </span>
+                  </template>
+
+                  <template
+                    slot="item"
+                    slot-scope="data"
+                  >
+                    <!-- <template v-if="typeof data.item !== 'object'">
+                      <v-list-tile-content>Item{{data.item}}</v-list-tile-content>
+                    </template> -->
+                    <template>
+                      <v-list-tile-avatar :color="checkIcon(data.item) ? 'grey': null">
+                          <img v-if="!checkIcon(data.item)" :src="require(`@/assets/factions/Icon_Faction_${data.item}.png`)">
+                          <strong class="white--text headline" v-if="checkIcon(data.item)">{{data.item | firstLetter}}</strong>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title>{{data.item | swapSpace }}</v-list-tile-title>
+                        <!-- <v-list-tile-sub-title v-html="data.item.Faction"></v-list-tile-sub-title> -->
+                      </v-list-tile-content>
+                    </template>
+                  </template>
+                </v-autocomplete>
+          </v-flex>
+
+
+          <v-flex xs3>
+  
+          </v-flex>
+          <v-flex xs3>
+            <v-autocomplete
+                  v-model="Campaign"
+                  :items="RoleList"
+                  dark
+                  clearable
+                  color="blue-grey lighten-2"
+                  label="Heros"
+                  item-text="Class"
+                  item-value="Class"
+                  @change="blurField($event)"
+                >
+                  <template
+                    slot="selection"
+                    slot-scope="data"
+                  >
+                      <v-avatar>
+                        <img :src="'@/assets/factions/Icon_Factions_/'+data.item.Faction">
+                      </v-avatar>
+                      {{ data.item.Class }}
+                  </template>
+                  <template
+                    slot="item"
+                    slot-scope="data"
+                  >
+                    <template v-if="typeof data.item !== 'object'">
+                      <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                    </template>
+                    <template v-else>
+                      <v-list-tile-avatar>
+                        <!-- <img :src="data.item.avatar"> -->
+                        AVA
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>
+                        <v-list-tile-title v-html="data.item.Class"></v-list-tile-title>
+                        <v-list-tile-sub-title v-html="data.item.Class"></v-list-tile-sub-title>
+                      </v-list-tile-content>
+                    </template>
+                  </template>
+                </v-autocomplete>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+
     </v-layout>
 
-    <v-layout class="filters" row>
 
-
-      <v-flex xs3>
-        <v-autocomplete
-              v-model="Faction"
-              :items="FactionList"
-              dark
-              clearable
-              color="blue-grey lighten-2"
-              label="Faction"
-              item-text="Faction"
-              item-value="Faction"
-              @change="blurField($event)"
-            >
-              <template
-                slot="selection"
-                slot-scope="data"
-                @input="data.parent.selectItem(data.item)"
-              >
-                  <v-avatar>
-                    <img :src="require(`@/assets/factions/Icon_Faction_${data.item}.png`)">
-                  </v-avatar>
-                  {{ data.item | swapSpace}}
-              </template>
-
-              <template
-                slot="item"
-                slot-scope="data"
-              >
-                <template v-if="typeof data.item !== 'object'">
-                  <v-list-tile-content v-text="data.item"></v-list-tile-content>
-                </template>
-                <template v-else>
-                  <v-list-tile-avatar>
-                    <img :src="require(`@/assets/factions/Icon_Faction_${data.item.Faction}.png`)">
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{data.item.Faction | swapSpace }}</v-list-tile-title>
-                    <v-list-tile-sub-title v-html="data.item.Faction"></v-list-tile-sub-title>
-                  </v-list-tile-content>
-                </template>
-              </template>
-            </v-autocomplete>
-      </v-flex>
-      <v-flex xs3>
-        <v-autocomplete
-              v-model="Role"
-              :items="RoleList"
-              dark
-              clearable
-              color="blue-grey lighten-2"
-              label="Role"
-              item-text="Role"
-              item-value="Role"
-              @change="blurField($event)"
-            >
-              <template
-                slot="selection"
-                slot-scope="data"
-              >
-                  <v-avatar>
-                    <img :src="'@/assets/roles/Icon_Role_/'+data.item.Role">
-                  </v-avatar>
-                  {{ data.item.Role }}
-              </template>
-              <template
-                slot="item"
-                slot-scope="data"
-              >
-                <template v-if="typeof data.item !== 'object'">
-                  <v-list-tile-content v-text="data.item"></v-list-tile-content>
-                </template>
-                <template v-else>
-                  <v-list-tile-avatar>
-                    <img :src="'@/assets/roles/Icon_Role_/'+data.item.Role">
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <v-list-tile-title v-html="data.item.Role"></v-list-tile-title>
-                    <v-list-tile-sub-title v-html="data.item.Role"></v-list-tile-sub-title>
-                  </v-list-tile-content>
-                </template>
-              </template>
-            </v-autocomplete>
-      </v-flex>
-      <v-flex xs3>
-        <v-autocomplete
-              v-model="Campaign"
-              :items="RoleList"
-              dark
-              clearable
-              color="blue-grey lighten-2"
-              label="Heros"
-              item-text="Class"
-              item-value="Class"
-              @change="blurField($event)"
-            >
-              <template
-                slot="selection"
-                slot-scope="data"
-              >
-                  <v-avatar>
-                    <img :src="'@/assets/factions/Icon_Factions_/'+data.item.Faction">
-                  </v-avatar>
-                  {{ data.item.Class }}
-              </template>
-              <template
-                slot="item"
-                slot-scope="data"
-              >
-                <template v-if="typeof data.item !== 'object'">
-                  <v-list-tile-content v-text="data.item"></v-list-tile-content>
-                </template>
-                <template v-else>
-                  <v-list-tile-avatar>
-                    <!-- <img :src="data.item.avatar"> -->
-                    AVA
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <v-list-tile-title v-html="data.item.Class"></v-list-tile-title>
-                    <v-list-tile-sub-title v-html="data.item.Class"></v-list-tile-sub-title>
-                  </v-list-tile-content>
-                </template>
-              </template>
-            </v-autocomplete>
-      </v-flex>
-    </v-layout>
 
     <!-- <v-btn @click="uploadData">Upload</v-btn>
     marks:{{marks}} -->
@@ -2129,7 +2103,8 @@ export default {
   CampaignList:['Light', 'Dark'],
   Hero: "",
   Faction: "",
-  FactionList:['Arekon_Undead','Barbarians','Beastmen','Changelings', 'Dark_Elves', 'Demons', 'Dragonkin','Druids','Dwarves', 'Elves','Knights_of_the_Council', 'Kobolds',"Ra'Archne", "Shaggy Pygmies", "Wild_Elves"],
+  FactionList:['Arekhon_Undead','Barbarians','Beastmen','Changelings', 'Dark_Elves', 'Demons', 'Dragonkin','Druids','Dwarves', 'Elves','Knights_of_the_Council', 'Kobolds',"Ra'Archne", "Shaggy Pygmies", "Wild_Elves"],
+  noFactionIcon:['Changelings', 'Dark_Elves', 'Knights_of_the_Council', "Shaggy Pygmies", "Wild_Elves"],
 
 }},
 methods:{
@@ -2139,25 +2114,32 @@ methods:{
     }
   },
   blurField(e){
-    console.log(e);
     // return e.replace(/_/g, " ")
   },
+  checkIcon(e){
+    console.log(e);
+    return this.noFactionIcon.includes(e)
+  }
 },
 computed: {
   filteredMarks () {
     const { Hero, Faction, Role, Campaign, marks } = this
-    console.log();
+    // console.log(Hero, Faction, Role, Campaign, marks);
     return this.marks
       .filter(mark => mark.Hero.toLowerCase().indexOf(Hero.toLowerCase()) > -1)
-      .filter(mark => mark[Faction] != '')
-      .filter(mark => mark[Role] != '')
-      .filter(mark => mark[Campaign] != '')
+      .filter(mark => Faction != '' ? mark.Faction === Faction : mark)
+      .filter(mark => Role != '' ? mark.Role === Role : mark)
+      .filter(mark => Campaign != '' ? mark.Campaign === Campaign : mark)
+
     },
 },
 filters:{
   swapSpace: function(e){
-    console.log('e',e);
+    // console.log('e',e);
     return e.replace(/_/g, " ")
+  },
+  firstLetter: function(e){
+    return e.charAt(0);
   }
 },
 firestore () {
@@ -2172,12 +2154,15 @@ firestore () {
 .flex-auto{
   flex:0 1 auto!important;
 }
+.headline{
+  text-shadow: 1px 1px 0 #000;
+}
 
 .top{
   img.logo{
     margin-top: 10px;
     margin-left: 20px;
-    max-width: 120px;
+    max-width: 100px;
   }
   .v-text-field__details{
     display: none!important;
@@ -2188,6 +2173,7 @@ firestore () {
 }
 .filters{
   // background: #fff;
+
 }
   .marks{
     color: #fff;
