@@ -2,30 +2,40 @@
   <div class="home">
 
     <v-layout row align-center justify-space-between class="top">
+      <v-flex class="flex-auto navTitle">
+        <h1 class="">Marks</h1>
+        <span class="subtitle">Extra Damage... if you plan well.</span>
+      </v-flex>
+      <v-spacer></v-spacer>
       <v-flex class="flex-auto">
         <img class="logo" src="@/assets/logo.png" alt="">
       </v-flex>
-      <v-spacer></v-spacer>
+
+
+    </v-layout>
+
+    <v-layout class="filters">
       <v-flex class="search flex-auto">
           <v-autocomplete
                 v-model="Hero"
                 :items="marks"
                 outline
                 dark
-                prepend-icon="search"
                 clearable
                 color="blue-grey lighten-2"
-                label="Search Heros"
+                label="Hero"
                 item-text="Hero"
                 item-value="Hero"
-                @change="blurField($event)"
+                single-line
+                content-class="searchResults"
+                @change="resetFilter($event, 'Hero')"
               >
                 <template
                   slot="selection"
                   slot-scope="data"
                 >
-                    <v-avatar>
-                      <img :src="data.item.avatar">
+                    <v-avatar class="enlarge" size="40">
+                      <img :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/heros/'+data.item.Hero+'.jpg'">
                     </v-avatar>
                     {{ data.item.Hero }}
                 </template>
@@ -38,8 +48,7 @@
                   </template>
                   <template v-else>
                     <v-list-tile-avatar>
-                      <!-- <img :src="data.item.avatar"> -->
-                      AVA
+                      <img :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/heros/'+data.item.Hero+'.jpg'">
                     </v-list-tile-avatar>
                     <v-list-tile-content>
                       <v-list-tile-title v-html="data.item.Hero"></v-list-tile-title>
@@ -51,11 +60,11 @@
       </v-flex>
 
       <v-flex>
-        <v-layout class="filters" row>
+        <v-layout row>
 
-          <v-flex xs3>
+          <v-flex class="factions">
             <!-- <span style="color:white">{{noFactionIcon.includes('Arekhon_Undead')}}</span> -->
-            <v-autocomplete
+            <v-select
                   v-model="Faction"
                   :items="FactionList"
                   dark
@@ -64,7 +73,9 @@
                   label="Faction"
                   item-text="Faction"
                   item-value="Faction"
-                  @change="blurField($event)"
+                  single-line
+                  outline
+                  @change="resetFilter($event, 'Faction')"
                 >
                   <template
                     slot="selection"
@@ -98,57 +109,55 @@
                       </v-list-tile-content>
                     </template>
                   </template>
-                </v-autocomplete>
+                </v-select>
           </v-flex>
 
 
-          <v-flex xs3>
-  
-          </v-flex>
-          <v-flex xs3>
-            <v-autocomplete
+          <v-flex class="campaigns">
+            <v-select
                   v-model="Campaign"
-                  :items="RoleList"
+                  :items="CampaignList"
                   dark
-                  clearable
                   color="blue-grey lighten-2"
-                  label="Heros"
-                  item-text="Class"
-                  item-value="Class"
-                  @change="blurField($event)"
+                  label="Campaign"
+                  clearable
+                  outline
+                  single-line
+                  @change="resetFilter($event, 'Campaign')"
                 >
                   <template
                     slot="selection"
                     slot-scope="data"
+                    @input="data.parent.selectItem(data.item)"
                   >
-                      <v-avatar>
-                        <img :src="'@/assets/factions/Icon_Factions_/'+data.item.Faction">
+                      <v-avatar >
+                        <img :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/campaign/'+data.item+'.png'">
                       </v-avatar>
-                      {{ data.item.Class }}
+                      <span class="selectText">
+                        {{ data.item | swapSpace}}
+                      </span>
                   </template>
+
                   <template
                     slot="item"
                     slot-scope="data"
                   >
-                    <template v-if="typeof data.item !== 'object'">
-                      <v-list-tile-content v-text="data.item"></v-list-tile-content>
-                    </template>
-                    <template v-else>
+                    <template>
                       <v-list-tile-avatar>
-                        <!-- <img :src="data.item.avatar"> -->
-                        AVA
+                          <img :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/campaign/'+data.item+'.png'">
                       </v-list-tile-avatar>
                       <v-list-tile-content>
-                        <v-list-tile-title v-html="data.item.Class"></v-list-tile-title>
-                        <v-list-tile-sub-title v-html="data.item.Class"></v-list-tile-sub-title>
+                        <v-list-tile-title>{{data.item}}</v-list-tile-title>
                       </v-list-tile-content>
                     </template>
                   </template>
-                </v-autocomplete>
+                </v-select>
+          </v-flex>
+          <v-flex xs3>
+
           </v-flex>
         </v-layout>
       </v-flex>
-
     </v-layout>
 
 
@@ -156,7 +165,24 @@
     <!-- <v-btn @click="uploadData">Upload</v-btn>
     marks:{{marks}} -->
     <v-layout class="marks" row wrap v-if="marks != undefined && marks.length > 0">
-      <v-flex xs4 v-for="(mark, index) in filteredMarks" :key="index">{{mark.Hero}}</v-flex>
+      <v-flex class="mark" v-for="(mark, index) in filteredMarks" :key="index">
+        <div class="card" :class="{'open': cardOpenIndex == index && cardIsOpen}">
+          <!-- Show in filters -->
+          <div class="card-collapsed" v-show="cardOpenIndex != index" @click="cardOpen(index)">
+            <img class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/heros/'+mark.Hero+'.jpg'">
+            <v-layout class="text">
+              <v-flex>
+                <img class="campaign" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/campaign/'+mark.Campaign+'.png'">
+              </v-flex>
+              <v-flex>
+                <strong class="headline">{{mark.Hero}}</strong>
+              </v-flex>
+            </v-layout>
+          </div>
+          <!-- Show in expansion -->
+          <mark-spell :mark="mark" v-show="cardOpenIndex == index" @closeCard="cardOpen(999)"></mark-spell>
+        </div>
+      </v-flex>
     </v-layout>
 
   </div>
@@ -164,13 +190,13 @@
 
 <script>
 // @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
+import markSpell from '@/components/markSpell.vue'
 import { db } from '@/main'
 
 export default {
   name: 'home',
   components: {
-    // HelloWorld
+    markSpell
   },
   data (){
     return{
@@ -2096,6 +2122,8 @@ export default {
         }
       ],
   marks: [],
+  cardOpenIndex: 999,
+  cardIsOpen: false,
   //filters
   Role: "",
   RoleList:['Tank','Melee',	'Ranged',	'Rogue',	'Caster',	'Healer', 'Boss'],
@@ -2113,17 +2141,31 @@ methods:{
       db.collection('marks').add(this.markData[i])
     }
   },
-  blurField(e){
-    // return e.replace(/_/g, " ")
-  },
+  // blurField(e){
+  //   // return e.replace(/_/g, " ")
+  // },
   checkIcon(e){
     console.log(e);
     return this.noFactionIcon.includes(e)
+  },
+  cardOpen(index){
+    if(index == 999){
+      this.cardIsOpen = false;
+      this.cardOpenIndex = '';
+    }
+    this.cardIsOpen = true;
+    this.cardOpenIndex = index;
+  },
+  resetFilter(event, section){
+    console.log('cleared', event);
+    if(event === undefined){
+      this[section] = '';
+    }
   }
 },
 computed: {
   filteredMarks () {
-    const { Hero, Faction, Role, Campaign, marks } = this
+    const { Hero, Faction, Role, Campaign } = this
     // console.log(Hero, Faction, Role, Campaign, marks);
     return this.marks
       .filter(mark => mark.Hero.toLowerCase().indexOf(Hero.toLowerCase()) > -1)
@@ -2151,31 +2193,130 @@ firestore () {
 </script>
 
 <style lang="scss">
+
 .flex-auto{
   flex:0 1 auto!important;
 }
-.headline{
-  text-shadow: 1px 1px 0 #000;
+.searchResults .v-avatar, .enlarge.v-avatar{
+  border-radius: 50%;
+  overflow: hidden;
+  img{
+    transform: scale(1.5,1.5);
+  }
 }
+.home{
+  min-height: 100vh;
 
-.top{
-  img.logo{
-    margin-top: 10px;
-    margin-left: 20px;
-    max-width: 100px;
+  .top{
+    .navTitle{
+      margin-left: 10px;
+      color: #fff;
+      text-align: left;
+      h1{
+        font-size: 45px;
+        margin-top: 8px;
+      }
+    }
+    img.logo{
+      margin-top: 10px;
+      margin-right: 20px;
+      max-width: 100px;
+    }
+    .v-text-field__details{
+      display: none!important;
+    }
+    .v-input__slot{
+      margin: 0!important;
+    }
   }
-  .v-text-field__details{
-    display: none!important;
-  }
-  .v-input__slot{
-    margin: 0!important;
-  }
-}
-.filters{
-  // background: #fff;
 
-}
+  .filters{
+    .search{
+
+    }
+    .factions{
+      max-width: 200px
+    }
+    .campaigns{
+      max-width: 200px
+    }
+    .v-select__slot, {
+      .v-input__append-inner:last-child{
+        display: none;
+      }
+    }
+  }
+
   .marks{
     color: #fff;
+    .mark{
+      width: 175px;
+      max-width: 175px;
+      height: 100%;
+      margin: 20px;
+      border-radius: 6px;
+      img{
+        width: 100%;
+      }
+      .campaign{
+        width: 30px;
+      }
+      .text{
+
+      }
+    }
   }
+
+.card {
+      background: rgba(26,58,100,1);
+    // background: -moz-linear-gradient(45deg, rgba(26,58,100,1) 0%, rgba(44,118,171,1) 100%);
+    // background: -webkit-gradient(left bottom, right top, color-stop(0%, rgba(26,58,100,1)), color-stop(100%, rgba(44,118,171,1)));
+    // background: -webkit-linear-gradient(45deg, rgba(26,58,100,1) 0%, rgba(44,118,171,1) 100%);
+    // background: -o-linear-gradient(45deg, rgba(26,58,100,1) 0%, rgba(44,118,171,1) 100%);
+    // background: -ms-linear-gradient(45deg, rgba(26,58,100,1) 0%, rgba(44,118,171,1) 100%);
+    // background: linear-gradient(45deg, rgba(26,58,100,1) 0%, rgba(44,118,171,1) 100%);
+    transition: all 1s ease;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, .07);
+    position: relative;
+    width: 100%;
+    left:0;
+    top: 0;
+    width: 175px;
+    &.open {
+      background-color: rgba(0,0,0,.5);
+      padding: 18px 32px;
+      border-radius: 5px;
+      cursor: default;
+      position: fixed;
+      // top: 0;
+      // left: 5%;
+      width:800px;
+      height: 400px;
+
+      // position: absolute;
+      left: 50%;
+      margin-left: -400px;
+      top: 50%;
+      margin-top: -200px;
+      z-index: 999999999;
+
+      mark-spell {
+        opacity: 1;
+        transition: opacity 0.5s ease;
+        transition-delay: .3s;
+        height: auto;
+      }
+    }
+    cursor: pointer;
+    mark-spell {
+      transition: none;
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+    }
+  }
+
+
+
+}
 </style>

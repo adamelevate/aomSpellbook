@@ -13,6 +13,8 @@
   </div>
 </template>
 
+
+
 <style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -21,7 +23,8 @@
   text-align: center;
   color: #000;
   background: #000 url('assets/world.jpg') no-repeat top center;
-  background-size: contain;
+  background-size:contain;
+  background-attachment: fixed;
 }
 
 </style>

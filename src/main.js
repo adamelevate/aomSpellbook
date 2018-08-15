@@ -8,15 +8,15 @@ import VueFire from 'vuefire'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 
+
 Vue.use(VueFire)
 firebase.initializeApp({
   projectId: 'aom-spellbook',
   databaseURL: 'https://aom-spellbook.firebaseio.com'
 })
 export const db = firebase.firestore()
-
-  const settings = {timestampsInSnapshots: true};
-  db.settings(settings);
+const settings = {timestampsInSnapshots: true};
+db.settings(settings);
 
 
 import App from './App.vue'
