@@ -179,19 +179,22 @@
             </v-select>
       </v-flex>
 
+
+
+
       <v-flex class="roles flex-auto">
-        <v-btn v-if="Role" class="selectedFilter" @click="Role = ''" flat color="yellow lighten-2">
+        <v-btn v-if="Classs" class="selectedFilter" @click="Classs = ''" flat color="yellow lighten-2">
           <v-avatar size="24">
-            <img :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/roles/Icon_Role_'+Role+'.png'">
+            <img :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/roles/Icon_Role_'+Classs+'.png'">
           </v-avatar>
           <span class="selectText">
-            {{ Role}}
+            {{ Classs}}
           </span>
         </v-btn>
         <v-select
-              v-if="!Role"
-              v-model="Role"
-              :items="RoleList"
+              v-if="!Classs"
+              v-model="Classs"
+              :items="ClasssList"
               dark
               outline
               color="blue-grey lighten-2"
@@ -199,7 +202,7 @@
               clearable
 
               single-line
-              @change="resetFilter($event, 'Role')"
+              @change="resetFilter($event, 'Classs')"
             >
               <template
                 slot="selection"
@@ -299,8 +302,8 @@ export default {
   dialog: false,
   dialogMark: [],
   //filters
-  Role: "",
-  RoleList:['Tank','Melee',	'Ranged',	'Rogue',	'Caster',	'Healer', 'Boss'],
+  Classs: "",
+  ClasssList:['Tank','Melee',	'Ranged',	'Rogue',	'Caster',	'Healer', 'Boss'],
   Campaign:"",
   CampaignList:['Light', 'Dark'],
   Hero: "",
@@ -353,12 +356,12 @@ methods:{
 },
 computed: {
   filteredMarks () {
-    const { Hero, Faction, Role, Campaign } = this
+    const { Hero, Faction, Classs, Campaign } = this
     // console.log(Hero, Faction, Role, Campaign, marks);
     return this.marks
       .filter(mark => mark.Hero.toLowerCase().indexOf(Hero.toLowerCase()) > -1)
       .filter(mark => Faction != '' ? mark.Faction === Faction : mark)
-      .filter(mark => Role != '' ? mark.Role === Role : mark)
+      .filter(mark => Classs != '' ? mark.Class === Classs : mark)
       .filter(mark => Campaign != '' ? mark.Campaign === Campaign : mark)
 
     },
