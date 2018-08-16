@@ -1,24 +1,10 @@
 <template>
-  <v-container class="home">
-
-    <v-layout class="loading" column align-center justify-center v-if="marks == undefined || marks.length == 0">
-      <v-flex>
-        <v-progress-circular
-          :size="70"
-          :width="7"
-          color="white"
-          indeterminate
-        ></v-progress-circular>
-      </v-flex>
-      <v-flex>
-        <h1 class="white--text">Loading Marks...</h1>
-      </v-flex>
-    </v-layout>
+  <v-container id="removeMarks">
 
     <v-layout class="filters" align-center justify-center row v-if="marks != undefined && marks.length > 0">
       <v-flex class="search flex-auto">
         <v-btn v-if="Hero" class="selectedFilter" @click="Hero = ''" flat color="yellow lighten-2">
-          <v-avatar class="enlarge" size="24">
+          <v-avatar class="enlarge" size="40">
             <img :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/heros/'+Hero+'.jpg'">
           </v-avatar>
           <span class="selectText">
@@ -68,7 +54,7 @@
 
       <v-flex class="factions flex-auto">
         <v-btn v-if="Faction" class="selectedFilter" @click="Faction = ''" flat color="yellow lighten-2">
-          <v-avatar size="24" :color="checkIcon(Faction) ? 'grey': null">
+          <v-avatar :color="checkIcon(Faction) ? 'grey': null">
             <img v-if="!checkIcon(Faction)" :src="require(`@/assets/factions/Icon_Faction_${Faction}.png`)">
             <strong class="white--text headline" v-if="checkIcon(Faction)">F</strong>
           </v-avatar>
@@ -129,7 +115,7 @@
 
       <v-flex class="campaigns flex-auto">
         <v-btn v-if="Campaign" class="selectedFilter" @click="Campaign = ''" flat color="yellow lighten-2">
-          <v-avatar size="24" >
+          <v-avatar >
             <img :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/campaign/'+Campaign+'.png'">
           </v-avatar>
           <span class="selectText">
@@ -235,7 +221,7 @@
 
 <!-- <v-btn @click="uploadData()">Upload</v-btn> -->
 
-    <v-layout class="marks" align-center justify-center row wrap v-if="marks != undefined && marks.length > 0" :class="{'desktop':$mq == 'md' || $mq == 'lg' || $mq == 'xl'}">
+    <v-layout class="marks" row wrap v-if="marks != undefined && marks.length > 0" :class="{'dektop':$mq == 'md' || $mq == 'lg' || $mq == 'xl'}">
       <v-flex class="mark" v-for="(mark, index) in filteredMarks" :key="index" v-if="mark.Name">
         <div class="card elevation-3" @click="showDialog(mark)" :class="{'active': dialogMark == mark}">
           <!-- Show in filters -->
@@ -261,18 +247,6 @@
       </v-flex>
     </v-layout>
 
-
-    <v-layout class="noResults" align-center justify-center column v-if="filteredMarks.length == 0 && marks.length > 0">
-      <v-flex xs4>&nbsp;</v-flex>
-      <v-flex>
-        <img class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/Skip_debuff.png'">
-      </v-flex>
-      <v-flex>
-        <h1 class="white--text">Avast, No Marks</h1>
-        <p class="white--text">Apparently there are no Marks associated with your filter...</p>
-      </v-flex>
-    </v-layout>
-
     <v-dialog v-model="dialog" :width="checkWidth($mq)" :fullscreen="$mq == 'xs' || $mq == 'sm'">
       <v-card v-if="dialog" style="background:transparent">
         <mark-spell :mark="dialogMark" @closeCard="hideDialog"></mark-spell>
@@ -289,12 +263,13 @@ import markSpell from '@/components/markSpell.vue'
 import { db } from '@/main'
 
 export default {
-  name: 'home',
+  name: 'removeMarks',
   components: {
     markSpell
   },
   data (){
     return{
+
   marks: [],
   dialog: false,
   dialogMark: [],
@@ -374,7 +349,7 @@ filters:{
 },
 firestore () {
   return {
-    marks: db.collection('marks').orderBy('Name')
+    marks: db.collection('removeMarks').orderBy('Name')
   }
 },
 }
@@ -382,16 +357,32 @@ firestore () {
 
 <style lang="scss">
 
-.searchResults .v-avatar, .enlarge.v-avatar{
-  border-radius: 50%;
-  overflow: hidden;
-  img{
-    transform: scale(1.5,1.5);
-  }
-}
-.home{
+#removeMarks{
   min-height: 100vh;
-  padding-bottom: 50px;
+
+  .top{
+    .navTitle{
+      margin-left: 10px;
+      color: #fff;
+      text-align: left;
+      text-align: right;
+      h1{
+        font-size: 45px;
+        margin-top: 8px;
+      }
+    }
+    img.logo{
+      margin-top: 10px;
+      margin-right: 20px;
+      max-width: 100px;
+    }
+    .v-text-field__details{
+      display: none!important;
+    }
+    .v-input__slot{
+      margin: 0!important;
+    }
+  }
 
   .filters{
     border-bottom:1px solid rgba(255,255,255,.15);
@@ -450,29 +441,21 @@ firestore () {
     color: #fff;
     &.desktop{
       .mark{
-        min-width: 175px;
-        margin: 10px;
-        width: auto;
-        max-width: 100%;
+        margin: 20px;
       }
     }
     .mark{
-      width:45%;
+      width: 175px;
+      max-width: 175px;
+      margin: 10px;
       border-radius: 6px;
-      margin: 10px 0;
-
       .card{
         width: 175px;
-        padding-top:8px;
         background: rgba(26,58,100,.4);
         transition: all .5s ease;
-        cursor: pointer;
         &:hover{
           transform: scale(1.2,1.2);
-          background: rgba(26,58,100,.8);
-          .v-avatar img{
-            border:2px solid #fff;
-          }
+          cursor: pointer;
         }
         &.active{
           opacity: .2;
@@ -480,10 +463,6 @@ firestore () {
         }
         .v-avatar{
             margin-right: 5px;
-            img{
-              transition: all .5s ease;
-              border:2px solid transparent;
-            }
         }
         // img{
         //   width: 100%;
@@ -510,12 +489,7 @@ firestore () {
       }
     }
   }
-.noResults{
-  text-align: center;
-  p{
-    font-size: 16px;
-  }
-}
+
 
 
 }

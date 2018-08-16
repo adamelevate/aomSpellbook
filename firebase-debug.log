@@ -1,0 +1,37 @@
+[debug] [2018-08-16T14:19:12.317Z] ----------------------------------------------------------------------
+[debug] [2018-08-16T14:19:12.320Z] Command:       /Users/adamlorentzen/.nvm/versions/node/v8.9.4/bin/node /Users/adamlorentzen/.nvm/versions/node/v8.9.4/bin/firebase deploy
+[debug] [2018-08-16T14:19:12.320Z] CLI Version:   4.1.1
+[debug] [2018-08-16T14:19:12.320Z] Platform:      darwin
+[debug] [2018-08-16T14:19:12.320Z] Node Version:  v8.9.4
+[debug] [2018-08-16T14:19:12.320Z] Time:          Thu Aug 16 2018 22:19:12 GMT+0800 (CST)
+[debug] [2018-08-16T14:19:12.320Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-08-16T14:19:12.332Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-08-16T14:19:12.332Z] > authorizing via signed-in user
+[debug] [2018-08-16T14:19:12.334Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/aom-spellbook  
+ 
+[debug] [2018-08-16T14:19:13.339Z] <<< HTTP RESPONSE 200
+[debug] [2018-08-16T14:19:13.340Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/aom-spellbook/tokens  
+ 
+[debug] [2018-08-16T14:19:14.085Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'aom-spellbook'...
+[info] 
+[info] i  deploying firestore, hosting
+[info] i  firestore: checking firestore.rules for compilation errors...
+[debug] [2018-08-16T14:19:15.001Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/aom-spellbook:test  
+
+[debug] [2018-08-16T14:19:16.204Z] <<< HTTP RESPONSE 200
+[info] ✔  firestore: rules file firestore.rules compiled successfully
+[debug] [2018-08-16T14:19:16.205Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/aom-spellbook/versions  
+
+[debug] [2018-08-16T14:19:17.906Z] <<< HTTP RESPONSE 200
+[info] i  firestore: uploading rules firestore.rules...
+[debug] [2018-08-16T14:19:17.907Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/aom-spellbook/rulesets  
+
+[debug] [2018-08-16T14:19:17.908Z] >>> HTTP REQUEST GET https://firestore.googleapis.com/v1beta1/projects/aom-spellbook/databases/(default)/indexes  
+ 
+[debug] [2018-08-16T14:19:18.554Z] <<< HTTP RESPONSE 200
+[debug] [2018-08-16T14:19:19.170Z] <<< HTTP RESPONSE 200
+[debug] [2018-08-16T14:19:19.170Z] [rules] created ruleset projects/aom-spellbook/rulesets/823d693d-c65d-4d4e-b15d-38cd9980b528
+[info] i  hosting: found 20 files in public directory
