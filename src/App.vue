@@ -20,10 +20,10 @@
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  // text-align: center;
   color: #000;
-  background: #000 url('assets/world.jpg') no-repeat top center;
-  background-size:contain;
+  background: #000 url('assets/world.jpg') no-repeat -10% center;
+  background-size:cover;
   background-attachment: fixed;
 }
 

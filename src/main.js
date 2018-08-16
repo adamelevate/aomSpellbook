@@ -5,9 +5,18 @@ import router from './router'
 import store from './store'
 // import Vuetify from 'vuetify'
 import VueFire from 'vuefire'
+import VueMq from 'vue-mq'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 
+
+Vue.use(VueMq,{
+  xs: 600,
+  sm: 960,
+  md: 1264,
+  lg: 1904,
+  xl: 'infinity'
+})
 
 Vue.use(VueFire)
 firebase.initializeApp({
