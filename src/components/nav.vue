@@ -18,8 +18,10 @@
         >
         <router-link v-for="(nav, index) in navigation" :key="index" :to="nav.path">
           <v-btn
-            :color="$route.path === nav.path ? 'light-green accent-4' : 'white'"
+            :color="$route.path === nav.path ? 'indigo darken-4' : 'white'"
+            :class="$route.path === nav.path ? 'light-green accent-4' : null"
             flat
+            block
             :value="index"
           >
             <span>{{nav.name}}</span>
@@ -58,8 +60,22 @@ export default {
     }
   },
   methods: {
+    getIndex(){
+      for (var i = 0; i < this.navigation.length; i++) {
+          this.navigation[i]
+          if(this.$route.path === this.navigation[i].path){
+            this.current = i;
+          }
+          else{
+            this.current = 0;
+          }
+      }
+    }
 
   },
+  created(){
+    this.getIndex()
+  }
 
 }
 </script>
@@ -77,6 +93,10 @@ export default {
     background: rgba(26,58,100,.8)!important;
     a{
       text-decoration: none!important;
+    }
+    .v-btn.v-btn--active{
+      background-color: #64dd17!important;
+      border-color: #64dd17!important;
     }
   }
 }

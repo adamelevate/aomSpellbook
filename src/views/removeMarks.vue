@@ -165,19 +165,20 @@
             </v-select>
       </v-flex>
 
+<!--
       <v-flex class="roles flex-auto">
-        <v-btn v-if="Role" class="selectedFilter" @click="Role = ''" flat color="yellow lighten-2">
+        <v-btn v-if="Classs" class="selectedFilter" @click="Classs = ''" flat color="yellow lighten-2">
           <v-avatar size="24">
-            <img :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/roles/Icon_Role_'+Role+'.png'">
+            <img :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/roles/Icon_Role_'+Classs+'.png'">
           </v-avatar>
           <span class="selectText">
-            {{ Role}}
+            {{ Classs}}
           </span>
         </v-btn>
         <v-select
-              v-if="!Role"
-              v-model="Role"
-              :items="RoleList"
+              v-if="!Classs"
+              v-model="Classs"
+              :items="ClasssList"
               dark
               outline
               color="blue-grey lighten-2"
@@ -185,12 +186,12 @@
               clearable
 
               single-line
-              @change="resetFilter($event, 'Role')"
+              @change="resetFilter($event, 'Classs')"
             >
               <template
                 slot="selection"
                 slot-scope="data"
-                @input="data.parent.selectItem(data.item)"
+
               >
                   <v-avatar >
                     <img :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/roles/Icon_Role_'+data.item+'.png'">
@@ -214,44 +215,14 @@
                 </template>
               </template>
             </v-select>
-      </v-flex>
+      </v-flex> -->
 
     </v-layout>
 
 
 <!-- <v-btn @click="uploadData()">Upload</v-btn> -->
+<mark-card :marks="filteredMarks" :oops="marks"></mark-card>
 
-    <v-layout class="marks" row wrap v-if="marks != undefined && marks.length > 0" :class="{'dektop':$mq == 'md' || $mq == 'lg' || $mq == 'xl'}">
-      <v-flex class="mark" v-for="(mark, index) in filteredMarks" :key="index" v-if="mark.Name">
-        <div class="card elevation-3" @click="showDialog(mark)" :class="{'active': dialogMark == mark}">
-          <!-- Show in filters -->
-          <!-- <img class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/heros/'+mark.Hero+'.jpg'"> -->
-          <v-layout class="skill" align-center justify-center column>
-          <v-flex class="portrait" xs12>
-            <v-avatar size="72">
-              <img class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/skills/'+mark.Name+'.png'">
-            </v-avatar>
-          </v-flex>
-            <!--<v-flex class="flex-auto">
-              <img v-if="mark.Campaign != ''" class="campaign" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/campaign/'+mark.Campaign+'.png'">
-              <v-avatar v-else color="grey" size="20">
-                <span>?</span>
-              </v-avatar>
-            </v-flex> -->
-            <v-flex xs12>
-              <div class="skill-name">{{mark.Name | swapSpace}}</div>
-              <small class="hero-name">{{mark.Hero | swapSpace}}</small>
-            </v-flex>
-          </v-layout>
-        </div>
-      </v-flex>
-    </v-layout>
-
-    <v-dialog v-model="dialog" :width="checkWidth($mq)" :fullscreen="$mq == 'xs' || $mq == 'sm'">
-      <v-card v-if="dialog" style="background:transparent">
-        <mark-spell :mark="dialogMark" @closeCard="hideDialog"></mark-spell>
-      </v-card>
-    </v-dialog>
 
 
 </v-container>
@@ -259,23 +230,112 @@
 
 <script>
 // @ is an alias to /src
-import markSpell from '@/components/markSpell.vue'
+import markCard from '@/components/markCard.vue'
 import { db } from '@/main'
 
 export default {
   name: 'removeMarks',
   components: {
-    markSpell
+    markCard
   },
   data (){
     return{
-
+      markData:[
+       {
+         "Hero": "Blood_Priest",
+         "Class": "Healer ",
+         "Faction": "Arekhon_Undead",
+         "Campaign": "Dark",
+         "Name": "Black_Sacrifice",
+         "SkillLvl": "5",
+         "HeroLvl": "30",
+         "EquipLvl": "4",
+         "FactionMark": "",
+         "ClassMark": "",
+         "Removal": "Friendly",
+         "Affects": "All",
+         "Description": "This skill removes all Marks from friendly heroes."
+       },
+       {
+         "Hero": "Silver_Moon",
+         "Class": "Healer ",
+         "Faction": "Barbarians",
+         "Campaign": "Light",
+         "Name": "Healing_Flow",
+         "SkillLvl": "5",
+         "HeroLvl": "30",
+         "EquipLvl": "5",
+         "FactionMark": "",
+         "ClassMark": "",
+         "Removal": "Friendly",
+         "Affects": "All",
+         "Description": "Removes all marks from allies."
+       },
+       {
+         "Hero": "Hargrim",
+         "Class": "Healer ",
+         "Faction": "Dwarves",
+         "Campaign": "Light",
+         "Name": "Light_of_the_Earth",
+         "SkillLvl": "???",
+         "HeroLvl": "???",
+         "EquipLvl": "???",
+         "FactionMark": "",
+         "ClassMark": "",
+         "Removal": "Friendly",
+         "Affects": "All",
+         "Description": "The skill removes all faction and class Marks from Hargrim's allies."
+       },
+       {
+         "Hero": "Trorin",
+         "Class": "Boss",
+         "Faction": "Dwarves",
+         "Campaign": "Light",
+         "Name": "Mountain_Durability",
+         "SkillLvl": "???",
+         "HeroLvl": "???",
+         "EquipLvl": "???",
+         "FactionMark": "",
+         "ClassMark": "",
+         "Removal": "Friendly?",
+         "Affects": "All",
+         "Description": "Takes away all faction and class Marks from allied heroes."
+       },
+       {
+         "Hero": "Soothsayer_Zytima",
+         "Class": "Caster",
+         "Faction": "Kobolds",
+         "Campaign": "Dark",
+         "Name": "Kobold_Camouflage",
+         "SkillLvl": "5",
+         "HeroLvl": "30",
+         "EquipLvl": "4",
+         "FactionMark": "",
+         "ClassMark": "V",
+         "Removal": "Kobold",
+         "Affects": "Kobold",
+         "Description": "Removes all Marks from her allies."
+       },
+       {
+         "Hero": "Ra'Archne_Queen",
+         "Class": "Boss",
+         "Faction": "Ra'Archne",
+         "Campaign": "Dark",
+         "Name": "Ra'Archne_Taboo",
+         "SkillLvl": "???",
+         "HeroLvl": "???",
+         "EquipLvl": "???",
+         "FactionMark": "",
+         "ClassMark": "",
+         "Removal": "Self",
+         "Affects": "Self",
+         "Description": "Removes all Marks from her body parts."
+       }
+     ],
   marks: [],
-  dialog: false,
-  dialogMark: [],
   //filters
-  Role: "",
-  RoleList:['Tank','Melee',	'Ranged',	'Rogue',	'Caster',	'Healer', 'Boss'],
+  Classs: "",
+  ClasssList:['Tank','Melee',	'Ranged',	'Rogue',	'Caster',	'Healer', 'Boss'],
   Campaign:"",
   CampaignList:['Light', 'Dark'],
   Hero: "",
@@ -287,28 +347,12 @@ export default {
 methods:{
   uploadData(){
     for (var i = 0; i < this.markData.length; i++) {
-      db.collection('marks').add(this.markData[i])
+      db.collection('removeMarks').add(this.markData[i])
     }
-  },
-  showDialog(mark){
-    this.dialog = true;
-    this.dialogMark = mark;
-  },
-  hideDialog(){
-    this.dialog = false;
-    this.dialogMark = [];
   },
   checkIcon(e){
     // console.log(e);
     return this.noFactionIcon.includes(e)
-  },
-  cardOpen(index){
-    if(index == 999){
-      this.cardIsOpen = false;
-      this.cardOpenIndex = '';
-    }
-    this.cardIsOpen = true;
-    this.cardOpenIndex = index;
   },
   resetFilter(event, section){
     // console.log('cleared', event);
@@ -328,12 +372,12 @@ methods:{
 },
 computed: {
   filteredMarks () {
-    const { Hero, Faction, Role, Campaign } = this
+    const { Hero, Faction, Classs, Campaign } = this
     // console.log(Hero, Faction, Role, Campaign, marks);
     return this.marks
       .filter(mark => mark.Hero.toLowerCase().indexOf(Hero.toLowerCase()) > -1)
       .filter(mark => Faction != '' ? mark.Faction === Faction : mark)
-      .filter(mark => Role != '' ? mark.Role === Role : mark)
+      .filter(mark => Classs != '' ? mark.Class === Classs : mark)
       .filter(mark => Campaign != '' ? mark.Campaign === Campaign : mark)
 
     },
@@ -359,138 +403,6 @@ firestore () {
 
 #removeMarks{
   min-height: 100vh;
-
-  .top{
-    .navTitle{
-      margin-left: 10px;
-      color: #fff;
-      text-align: left;
-      text-align: right;
-      h1{
-        font-size: 45px;
-        margin-top: 8px;
-      }
-    }
-    img.logo{
-      margin-top: 10px;
-      margin-right: 20px;
-      max-width: 100px;
-    }
-    .v-text-field__details{
-      display: none!important;
-    }
-    .v-input__slot{
-      margin: 0!important;
-    }
-  }
-
-  .filters{
-    border-bottom:1px solid rgba(255,255,255,.15);
-
-    > .flex{
-      margin-right: 20px;
-    }
-    .v-text-field__details{
-      display: none;
-    }
-    .v-input, .v-input__slot{
-      margin: 0!important;
-      border: none!important;
-    }
-    .search .v-select__selections{
-      max-width: 46px
-    }
-    .factions .v-select__selections{
-      max-width: 46px
-    }
-    .campaigns .v-select__selections{
-      max-width: 43px
-    }
-    .roles .v-select__selections{
-      max-width: 1px
-    }
-    .v-input__slot{
-      padding: 0;
-
-      &:after, &:before{
-        display: none!important;
-      }
-    }
-    .v-btn{
-      height: 56px;
-      padding: 0 5px;
-      font-weight: bold;
-      font-size: 16px;
-      margin: 0;
-      .v-avatar{
-        margin-right: 5px;
-      }
-      .v-icon{
-        margin-left: 5px;
-        opacity: .3;
-      }
-    }
-    // .v-select__slot, {
-    //   .v-input__append-inner:last-child{
-    //     display: none;
-    //   }
-    // }
-  }
-
-  .marks{
-    color: #fff;
-    &.desktop{
-      .mark{
-        margin: 20px;
-      }
-    }
-    .mark{
-      width: 175px;
-      max-width: 175px;
-      margin: 10px;
-      border-radius: 6px;
-      .card{
-        width: 175px;
-        background: rgba(26,58,100,.4);
-        transition: all .5s ease;
-        &:hover{
-          transform: scale(1.2,1.2);
-          cursor: pointer;
-        }
-        &.active{
-          opacity: .2;
-          border: 3px solid #fff;
-        }
-        .v-avatar{
-            margin-right: 5px;
-        }
-        // img{
-        //   width: 100%;
-        // }
-        .skill{
-          .skill-name{
-            font-weight: bold;
-          }
-          .hero-name{
-            display: block;
-            text-align: center;
-            font-size: 11px;
-            opacity: .75;
-            padding-bottom: 5px;
-          }
-        }
-        .campaign{
-          width: 30px;
-        }
-        .hero-name{
-          font-size: 18px;
-          text-shadow: 1px 1px 0 #000;
-        }
-      }
-    }
-  }
-
-
 
 }
 </style>

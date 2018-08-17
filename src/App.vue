@@ -5,11 +5,11 @@
       <router-link to="/about">About</router-link>
     </div> -->
     <v-app>
-      <v-layout row align-center justify-space-between class="navigation-container">
-        <v-flex class="flex-auto">
+      <v-layout wrap row align-center justify-space-between class="navigation-container">
+        <v-flex class="flex-auto logo-container" xs12 sm12 :class="{'mobile': $mq == 'xs' || $mq == 'sm'}">
           <img class="logo" src="@/assets/logo.png" alt="">
+          FUCK
         </v-flex>
-        <v-spacer></v-spacer>
         <v-flex class="flex-auto navTitle">
           <navigation></navigation>
         </v-flex>
@@ -59,6 +59,14 @@ footer{
 
 .flex-auto{
   flex:0 1 auto!important;
+}
+
+.logo-container.mobile{
+  width: 100%;
+  img{
+    margin: 0 auto;
+    display: block;
+  }
 }
 
 .navigation-container{
