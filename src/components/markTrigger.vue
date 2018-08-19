@@ -162,14 +162,17 @@ export default {
           padding-top: 5px;
         }
         .hero-portrait{
-          height: 60px;
-          overflow: hidden;
-          border-radius: 50%;
-          margin-right: 8px;
-          border:2px solid rgba(255,255,255,.7);
           .hero{
-            transform: scale(2,2);
-            margin-bottom: -95%;
+            height: 60px;
+            width: 60px!important;
+            overflow: hidden;
+            border-radius: 50%;
+            margin-right: 8px;
+            border:2px solid rgba(255,255,255,.7);
+            img{
+              transform: scale(2,2);
+              margin-bottom: -42%;
+            }
           }
         }
       }

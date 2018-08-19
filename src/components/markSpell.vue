@@ -118,7 +118,7 @@ export default {
   #mark-container{
     background: rgba(20,19,37, 1);
     color: #fff;
-    border: 2px solid rgba(255,255,255,.75);
+
     .title{
       // color:rgba(49,49,73,1);
       font-weight: normal;
@@ -224,13 +224,16 @@ export default {
       }
     }
     .close{
-      position: absolute;
+      position: fixed;
       top: 2%;
       right: 2%;
     }
     &.desktop{
       height: 100vh;
-
+      border: 2px solid rgba(255,255,255,.75);
+      .close{
+        position: absolute;
+      }
     }
   }
 </style>

@@ -2,8 +2,8 @@
   <div class="">
 
 
-  <v-layout id="markCard" align-center justify-center row wrap v-if="marks != undefined && marks.length > 0" :class="{'desktop':$mq == 'md' || $mq == 'lg' || $mq == 'xl'}">
-    <v-flex class="mark flex-auto" v-for="(mark, index) in marks" :key="index" v-if="mark.Name" v-show="imageLoaded" xs5>
+  <v-layout id="markCard" align-center justify-space-between row wrap v-if="marks != undefined && marks.length > 0" :class="{'desktop':$mq == 'md' || $mq == 'lg' || $mq == 'xl'}">
+    <v-flex class="mark flex-auto" v-for="(mark, index) in marks" :key="index" v-if="mark.Name" v-show="imageLoaded" xs6>
       <div class="card elevation-3" @click="showDialog(mark)" :class="{'active': dialogMark == mark}">
         <!-- Show in filters -->
         <!-- <img class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/heros/'+mark.Hero+'.jpg'"> -->
@@ -120,7 +120,7 @@ export default {
      }
 
     .card{
-      width: 175px;
+      width: 100%;
       padding-top:8px;
       background: rgba(26,58,100,.4);
       transition: all .5s ease;

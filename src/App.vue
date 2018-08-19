@@ -51,6 +51,13 @@ export default {
   background: #000 url('assets/world.jpg') no-repeat -5% center;
   background-size:cover;
   background-attachment: fixed;
+  .logo-container{
+    &.mobile{
+      img{
+        margin:0 auto;
+      }
+    }
+  }
 }
 
 footer{
