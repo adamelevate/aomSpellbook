@@ -1,5 +1,5 @@
 <template>
-  <div id="mark-container" :class="{'dektop': $mq == 'md' || $mq =='lg'}">
+  <div id="mark-container" :class="{'desktop': $mq == 'md' || $mq =='lg' || $mq == 'xl'}">
     <v-layout :column="$mq == 'xs' || $mq =='sm'" :reverse="$mq == 'xs' || $mq =='sm'">
       <v-flex class="details" xs12 sm12 md7 lg7>
         <!-- Makes a mark -->
@@ -118,7 +118,8 @@ export default {
   #mark-container{
     background: rgba(20,19,37, 1);
     color: #fff;
-
+    position: relative;
+    overflow: scroll;
     .title{
       // color:rgba(49,49,73,1);
       font-weight: normal;
@@ -229,10 +230,10 @@ export default {
       right: 2%;
     }
     &.desktop{
-      height: 100vh;
+      height: 90vh;
       border: 2px solid rgba(255,255,255,.75);
       .close{
-        position: absolute;
+        position: absolute!important;
       }
     }
   }
