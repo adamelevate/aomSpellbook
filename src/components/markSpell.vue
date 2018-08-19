@@ -7,35 +7,66 @@
 
           <v-layout align-center justify-start row fill-height>
             <v-flex class="flex-auto">
-              <v-avatar size="60" color="teal">
-                <img class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/skills/'+mark.Name+'.png'">
+              <v-avatar size="60" color="teal" class="skillMark">
+                <img class="portrait"  :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/skills/'+mark.Name+'.png'">
                 <!-- <span>{{mark.Name | firstLetter}}</span> -->
               </v-avatar>
             </v-flex>
             <v-flex>
               <h1>{{mark.Name | swapSpace}}</h1>
-              <strong class="title">Marks {{mark.Affects}}</strong>
+              <div class="title blue-grey--text text--lighten-1">Marks <strong>{{mark.Affects}}</strong> with <strong>{{mark.ClassMark || mark.FactionMark | swapSpace}}</strong> icon</div>
             </v-flex>
           </v-layout>
-          <v-layout class="card" wrap>
-            <v-flex v-if="mark.Description" class="description" xs12>{{mark.Description}}</v-flex>
-            <v-flex xs6>Skill Level Required</v-flex>
-            <v-flex xs6>{{mark.SkillLvl}}</v-flex>
-            <v-flex xs6>Hero Level Required</v-flex>
-            <v-flex xs6>{{mark.HeroLvl}}</v-flex>
-            <v-flex xs6>Equiment Level Required</v-flex>
-            <v-flex xs6>{{mark.EquipLvl}}</v-flex>
+          <v-layout class="card" wrap row>
+            <v-flex class="markSet">
+              <v-layout align-center>
+                <v-flex class="flex-auto ">
+                  <div class="" v-if="!mark.Removal">
+                    <v-avatar size="60" color="gray">
+                      <img v-if="mark.ClassMark" class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/roles/Icon_Role_'+mark.ClassMark+'.png'">
+                      <img v-else-if="mark.FactionMark" class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_'+mark.FactionMark+'.png'">
+                    </v-avatar>
+                    <v-icon class="set">arrow_drop_down</v-icon>
+                  </div>
+                  <div class="" v-if="mark.Removal">
+                    <v-avatar size="60" color="gray">
+                      <v-icon v-if="mark.Removal == 'Self'">person</v-icon>
+                      <img v-else-if="mark.Removal == 'Kobold'" class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_'+mark.Faction+'.png'">
+                      <v-icon v-else>group</v-icon>
+                    </v-avatar>
+                    <v-icon class="set">arrow_drop_down</v-icon>
+                  </div>
+                </v-flex>
+                <v-flex v-if="mark.Description" class="description" xs12>{{mark.Description}}</v-flex>
+                <v-flex v-if="!mark.Description" class="description" xs12>
+                  <small><i>no specific modifiers</i></small><br>
+                  Places a <strong>{{mark.ClassMark || mark.FactionMark | swapSpace}}</strong> mark that an ally can trigger.
+                </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-flex>
+              <v-layout wrap>
+                <v-flex xs6>Skill Level Required</v-flex>
+                <v-flex xs6>{{mark.SkillLvl}}</v-flex>
+                <v-flex xs6>Hero Level Required</v-flex>
+                <v-flex xs6>{{mark.HeroLvl}}</v-flex>
+                <v-flex xs6>Equiment Level Required</v-flex>
+                <v-flex xs6>{{mark.EquipLvl}}</v-flex>
+              </v-layout>
+            </v-flex>
           </v-layout>
         </div>
-        <div class="triggers">
+        <div class="triggers" v-if="!mark.Removal">
           <br>
-            <h3>Heros who "trigger" this mark:</h3>
-            <strong class="light-yellow light-yellow--lighten-2">Coming soon!</strong>
+            <h3>Skills that "Trigger" this mark:</h3>
+            <markTrigger :mark="mark"></markTrigger>
         </div>
       </v-flex>
       <v-flex xs12 sm12 md5 lg5>
-        <div class="portrait">
-          <img class="" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/heros/'+mark.Hero+'.jpg'">
+        <div class="heroPortrait" :class="{'desktop':$mq == 'md' || $mq == 'lg'}">
+          <transition name="fade">
+            <img class="" v-on:load="checkImage" v-show="imageLoaded" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/heros/'+mark.Hero+'.jpg'">
+          </transition>
           <div class="heroName">{{mark.Hero}}</div>
         </div>
       </v-flex>
@@ -45,18 +76,30 @@
 </template>
 
 <script>
+
+import markTrigger from '@/components/markTrigger.vue'
 export default {
   name: 'markSpell',
+  components:{
+    markTrigger
+  },
   props: ['mark'],
   data (){
     return{
       // mark: []
+      imageLoaded : false,
     }
   },
   methods: {
     closeCard(){
       this.$emit('closeCard', 'close')
+    },
+    checkImage(){
+      this.imageLoaded=true;
     }
+  },
+  beforeDestroy(){
+    this.imageLoaded = false;
   },
   filters:{
     swapSpace: function(e){
@@ -77,11 +120,21 @@ export default {
     color: #fff;
     border: 2px solid rgba(255,255,255,.75);
     .title{
-      opacity: .5;
+      // color:rgba(49,49,73,1);
+      font-weight: normal;
+      strong{
+        opacity: 1;
+        color: #fff;
+      }
     }
 
-    .portrait{
+
+    .heroPortrait{
       position: relative;
+      min-height: 300px;
+      &.desktop{
+        min-height: 447px;
+      }
       &:before {
   		content: "";
   		position: absolute;
@@ -98,6 +151,15 @@ export default {
   	   }
        img{
          width: 100%;
+         &.fade-enter-active {
+            transition: opacity 1.5s ease-in-out;
+          }
+         &.fade-enter-to {
+            opacity: 1;
+          }
+         &.fade-enter {
+            opacity: 0;
+          }
        }
        .heroName{
          font-size: 26px;
@@ -115,7 +177,7 @@ export default {
       padding: 8px 16px;
       .skill{
         padding: 5px;
-        .v-avatar{
+        .v-avatar.skillMark{
           margin: 0 8px;
           img{border: 2px solid white;}
         }
@@ -136,10 +198,28 @@ export default {
           margin-bottom:5px;
           font-size: 16px;
         }
-        .description{
+        .markSet{
           padding-bottom: 5px;
           margin-bottom: 10px;
           border-bottom: 1px solid rgba(20,19,37, 1);
+
+          .v-icon.set{
+            margin: 0 auto;
+            display: block;
+            color: #fff;
+            text-align: center;
+            font-size: 38px;
+            margin-top: -5px;
+            line-height: 14px;
+            text-shadow: 1px 1px 4px rgba(0,0,0,.7);
+          }
+          .v-avatar .v-icon{
+            font-size: 45px;
+            color: #fff;
+          }
+          .description{
+            padding-left: 8px;
+          }
         }
       }
     }

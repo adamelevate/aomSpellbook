@@ -3,16 +3,18 @@
 
 
   <v-layout id="markCard" align-center justify-center row wrap v-if="marks != undefined && marks.length > 0" :class="{'desktop':$mq == 'md' || $mq == 'lg' || $mq == 'xl'}">
-    <v-flex class="mark flex-auto" v-for="(mark, index) in marks" :key="index" v-if="mark.Name">
+    <v-flex class="mark flex-auto" v-for="(mark, index) in marks" :key="index" v-if="mark.Name" v-show="imageLoaded" xs5>
       <div class="card elevation-3" @click="showDialog(mark)" :class="{'active': dialogMark == mark}">
         <!-- Show in filters -->
         <!-- <img class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/heros/'+mark.Hero+'.jpg'"> -->
         <v-layout class="skill" align-center justify-center column>
-        <v-flex class="portrait" xs12>
-          <v-avatar size="72">
-            <img class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/skills/'+mark.Name+'.png'">
-          </v-avatar>
-        </v-flex>
+          <v-flex class="portrait" xs12>
+            <v-avatar size="72" :class="{'loading' : !imageLoaded }">
+              <transition name="fade">
+                <img  v-on:load="checkImage" v-show="imageLoaded" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/skills/'+mark.Name+'.png'">
+              </transition>
+            </v-avatar>
+          </v-flex>
           <v-flex xs12>
             <div class="skill-name">{{mark.Name | swapSpace}}</div>
             <small class="hero-name">{{mark.Hero | swapSpace}}</small>
@@ -52,7 +54,8 @@ export default {
   data (){
     return{
       dialog: false,
-      dialogMark : []
+      dialogMark : [],
+      imageLoaded: false,
       // mark: []
     }
   },
@@ -73,6 +76,9 @@ export default {
       else if (mq=='lg') {
         return 1024
       }
+    },
+    checkImage(){
+      this.imageLoaded=true;
     }
   },
   filters:{
@@ -103,6 +109,15 @@ export default {
     width:45%;
     border-radius: 6px;
     margin: 10px 0;
+    &.fade-enter-active {
+       transition: opacity .5s ease-in-out;
+     }
+    &.fade-enter-to {
+       opacity: 1;
+     }
+    &.fade-enter {
+       opacity: 0;
+     }
 
     .card{
       width: 175px;
@@ -123,9 +138,21 @@ export default {
       }
       .v-avatar{
           margin-right: 5px;
+          &.loading{
+            background: rgba(255,255,255, .2);
+          }
           img{
             transition: all .5s ease;
             border:2px solid transparent;
+            &.fade-enter-active {
+               transition: opacity .5s ease-in-out;
+             }
+            &.fade-enter-to {
+               opacity: 1;
+             }
+            &.fade-enter {
+               opacity: 0;
+             }
           }
       }
       // img{

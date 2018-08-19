@@ -5,12 +5,14 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-
+    triggers:[]
   },
   mutations: {
-
+    setTriggers: (state, data) => {
+      state.triggers = data;
+    },
   },
-  actions: {
-
+  getters: {
+    triggers: state => state.triggers,
   }
 })

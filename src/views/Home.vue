@@ -96,7 +96,7 @@
                 <hr>
                 <v-btn v-if="Faction" class="selectedFilter" @click="Faction = ''" flat color="yellow lighten-2">
                   <v-avatar size="24" :color="checkIcon(Faction) ? 'grey': null">
-                    <img v-if="!checkIcon(Faction)" :src="require(`@/assets/factions/Icon_Faction_${Faction}.png`)">
+                    <img v-if="!checkIcon(Faction)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item}.png`">
                     <strong class="white--text headline" v-if="checkIcon(Faction)">F</strong>
                   </v-avatar>
                   <span class="selectText">
@@ -124,7 +124,7 @@
                         @input="data.parent.selectItem(data.item)"
                       >
                           <v-avatar :color="checkIcon(data.item) ? 'grey': null">
-                            <img v-if="!checkIcon(data.item)" :src="require(`@/assets/factions/Icon_Faction_${data.item}.png`)">
+                            <img v-if="!checkIcon(data.item)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item}.png`">
                             <strong class="white--text headline" v-if="checkIcon(data.item)">F</strong>
                           </v-avatar>
                           <span class="selectText">
@@ -141,7 +141,7 @@
                         </template> -->
                         <template>
                           <v-list-tile-avatar :color="checkIcon(data.item) ? 'grey': null">
-                              <img v-if="!checkIcon(data.item)" :src="require(`@/assets/factions/Icon_Faction_${data.item}.png`)">
+                              <img v-if="!checkIcon(data.item)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item}.png`">
                               <strong class="white--text headline" v-if="checkIcon(data.item)">{{data.item | firstLetter}}</strong>
                           </v-list-tile-avatar>
                           <v-list-tile-content>
@@ -351,7 +351,7 @@
                 @input="data.parent.selectItem(data.item)"
               >
                   <v-avatar :color="checkIcon(data.item) ? 'grey': null">
-                    <img v-if="!checkIcon(data.item)" :src="require(`@/assets/factions/Icon_Faction_${data.item}.png`)">
+                    <img v-if="!checkIcon(data.item)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item}.png`">
                     <strong class="white--text headline" v-if="checkIcon(data.item)">F</strong>
                   </v-avatar>
                   <span class="selectText">
@@ -368,7 +368,7 @@
                 </template> -->
                 <template>
                   <v-list-tile-avatar :color="checkIcon(data.item) ? 'grey': null">
-                      <img v-if="!checkIcon(data.item)" :src="require(`@/assets/factions/Icon_Faction_${data.item}.png`)">
+                      <img v-if="!checkIcon(data.item)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item}.png`">
                       <strong class="white--text headline" v-if="checkIcon(data.item)">{{data.item | firstLetter}}</strong>
                   </v-list-tile-avatar>
                   <v-list-tile-content>
@@ -505,6 +505,7 @@
 
 import markCard from '@/components/markCard.vue'
 import markJSON from '@/components/Marks.json'
+import triggerMarkJSON from '@/components/Triggers.json'
 import removeMarkJSON from '@/components/removeMarks.json'
 import { db } from '@/main'
 
@@ -516,6 +517,7 @@ export default {
   data (){
     return{
   marks: [],
+  triggers: [],
   dialog: false,
   dialogMark: [],
   //filters
@@ -529,6 +531,7 @@ export default {
   noFactionIcon:['Changelings', 'Dark_Elves', 'Knights_of_the_Council', "Shaggy_Pygmies", "Wild_Elves", "Unaligned"],
   markData : markJSON,
   removeMarkData : removeMarkJSON,
+  triggerMarkData : triggerMarkJSON,
   triggerData: [],
   menu:false
 }},
@@ -540,6 +543,9 @@ methods:{
     // for (var i = 0; i < this.removeMarkData.length; i++) {
     //   db.collection('removeMarks').add(this.removeMarkData[i])
     // }
+    for (var i = 0; i < this.triggerMarkData.length; i++) {
+      db.collection('triggers').add(this.triggerMarkData[i])
+    }
   },
   checkIcon(e){
     // console.log(e);
@@ -559,7 +565,7 @@ methods:{
     this.menu = false
   },
   checkWidth(mq){
-    console.log('$mq', mq);
+    // console.log('$mq', mq);
     if(mq=='md'){
         return 800
     }
@@ -590,13 +596,21 @@ filters:{
   }
 },
 created(){
-  console.log('loaded', this.markData, this.removeMarkData);
+  // console.log('loaded', this.markData, this.removeMarkData);
 },
 firestore () {
   return {
-    marks: db.collection('marks').orderBy('Name')
+    marks: db.collection('marks').orderBy('Name'),
+    triggers: db.collection('triggers').orderBy('Hero')
+
   }
 },
+watch:{
+  triggers: function(val, old){
+    // console.log('val, old', val, old);
+    this.$store.commit('setTriggers', val)
+  }
+}
 }
 </script>
 
