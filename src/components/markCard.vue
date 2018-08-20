@@ -2,7 +2,7 @@
   <div class="">
 
 
-  <v-layout id="markCard" align-center justify-space-between row wrap v-if="marks != undefined && marks.length > 0" :class="{'desktop':$mq == 'md' || $mq == 'lg' || $mq == 'xl'}">
+  <v-layout id="markCard" align-center justify-center row wrap v-if="marks != undefined && marks.length > 0" :class="{'desktop':$mq == 'md' || $mq == 'lg' || $mq == 'xl'}">
     <v-flex class="mark flex-auto" v-for="(mark, index) in marks" :key="index" v-if="mark.Name" v-show="imageLoaded" xs6>
       <div class="card elevation-3" @click="showDialog(mark)" :class="{'active': dialogMark == mark}">
         <!-- Show in filters -->

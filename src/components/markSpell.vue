@@ -143,6 +143,7 @@ export default {
   		bottom: 0;
   		left: 0;
   		right: 0;
+      z-index: 99999;
   		// box-shadow: inset 0 0 8px rgba(0,0,0,.6);
   		// -moz-box-shadow: inset 0 0 8px rgba(0,0,0,.6);
   		// -webkit-box-shadow: inset 0 0 8px rgba(0,0,0,.6);
@@ -228,6 +229,7 @@ export default {
       position: fixed;
       top: 2%;
       right: 2%;
+      z-index: 999999999;
     }
     &.desktop{
       height: 90vh;

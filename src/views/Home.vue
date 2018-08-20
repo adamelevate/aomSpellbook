@@ -41,6 +41,7 @@
               </span>
             </v-card-title>
             <v-layout column class="filters mobile">
+              <v-flex class="flex-auto filter-label">Search by:</v-flex>
               <v-flex class="search flex-auto">
                 <hr>
                 <v-btn v-if="Hero" class="selectedFilter" @click="Hero = ''" flat color="yellow lighten-2">
@@ -91,12 +92,12 @@
 
                       </v-autocomplete>
               </v-flex>
-
+              <v-flex class="flex-auto filter-label">Filter Marks by:</v-flex>
               <v-flex class="factions flex-auto">
                 <hr>
                 <v-btn v-if="Faction" class="selectedFilter" @click="Faction = ''" flat color="yellow lighten-2">
                   <v-avatar size="24" :color="checkIcon(Faction) ? 'grey': null">
-                    <img v-if="!checkIcon(Faction)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item}.png`">
+                    <img v-if="!checkIcon(Faction)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${Faction}.png`">
                     <strong class="white--text headline" v-if="checkIcon(Faction)">F</strong>
                   </v-avatar>
                   <span class="selectText">
@@ -106,29 +107,29 @@
                 </v-btn>
 
                 <v-select
-                    v-if="!Faction"
+                    v-if="!Faction && FactionList.length > 0"
                     outline
                     v-model="Faction"
-                    :items="FactionList"
+                    :items.sync="FactionList"
+                    dark
                     color="blue-grey lighten-2"
                     label="Faction"
-                    item-text="Faction"
-                    item-value="Faction"
+                    item-text="Name"
+                    item-value="Name"
                     single-line
-                    dark
                     @change="resetFilter($event, 'Faction')"
                     >
                       <template
                         slot="selection"
                         slot-scope="data"
-                        @input="data.parent.selectItem(data.item)"
+                        @input="data.parent.selectItem(data.item.Name)"
                       >
-                          <v-avatar :color="checkIcon(data.item) ? 'grey': null">
-                            <img v-if="!checkIcon(data.item)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item}.png`">
-                            <strong class="white--text headline" v-if="checkIcon(data.item)">F</strong>
+                          <v-avatar :color="checkIcon(data.item.Name) ? 'grey': null">
+                            <img v-if="!checkIcon(data.item.Name)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item.Name}.png`">
+                            <strong class="white--text headline" v-if="checkIcon(data.item.Name)">F</strong>
                           </v-avatar>
                           <span class="selectText">
-                            {{ data.item | swapSpace}}
+                            {{ data.item.Name | swapSpace}}
                           </span>
                       </template>
 
@@ -140,12 +141,12 @@
                           <v-list-tile-content>Item{{data.item}}</v-list-tile-content>
                         </template> -->
                         <template>
-                          <v-list-tile-avatar :color="checkIcon(data.item) ? 'grey': null">
-                              <img v-if="!checkIcon(data.item)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item}.png`">
-                              <strong class="white--text headline" v-if="checkIcon(data.item)">{{data.item | firstLetter}}</strong>
+                          <v-list-tile-avatar :color="checkIcon(data.item.Name) ? 'grey': null">
+                              <img v-if="!checkIcon(data.item.Name)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item.Name}.png`">
+                              <strong class="white--text headline" v-if="checkIcon(data.item.Name)">{{data.item.Name | firstLetter}}</strong>
                           </v-list-tile-avatar>
-                          <v-list-tile-content>
-                            <v-list-tile-title>{{data.item | swapSpace}}</v-list-tile-title>
+                          <v-list-tile-content >
+                            <v-list-tile-title>{{data.item.Name | swapSpace }}</v-list-tile-title>
                             <!-- <v-list-tile-sub-title v-html="data.item.Faction"></v-list-tile-sub-title> -->
                           </v-list-tile-content>
                         </template>
@@ -269,7 +270,13 @@
         </v-menu>
 
 
+
+
+
+
+
     <v-layout class="filters" align-center justify-center row v-if="marks != undefined && marks.length > 0 && $mq != 'xs' && $mq != 'sm'">
+      <v-flex class="flex-auto filter-label">Search by:</v-flex>
       <v-flex class="search flex-auto">
         <v-btn v-if="Hero" class="selectedFilter" @click="Hero = ''" flat color="yellow lighten-2">
           <v-avatar class="enlarge" size="24">
@@ -320,7 +327,9 @@
               </v-autocomplete>
       </v-flex>
 
-      <v-flex class="factions flex-auto">
+      <v-flex class="flex-auto filter-label">Filter Marks by:</v-flex>
+
+      <v-flex class="factions flex-auto" v-if=" FactionList.length > 0">
         <v-btn v-if="Faction" class="selectedFilter" @click="Faction = ''" flat color="yellow lighten-2">
           <v-avatar size="24" :color="checkIcon(Faction) ? 'grey': null">
             <img v-if="!checkIcon(Faction)" :src="require(`@/assets/factions/Icon_Faction_${Faction}.png`)">
@@ -333,29 +342,29 @@
         </v-btn>
 
         <v-select
-            v-if="!Faction"
+            v-if="!Faction && FactionList.length > 0"
             outline
             v-model="Faction"
-            :items="FactionList"
+            :items.sync="FactionList"
             dark
             color="blue-grey lighten-2"
             label="Faction"
-            item-text="Faction"
-            item-value="Faction"
+            item-text="Name"
+            item-value="Name"
             single-line
             @change="resetFilter($event, 'Faction')"
             >
               <template
                 slot="selection"
                 slot-scope="data"
-                @input="data.parent.selectItem(data.item)"
+                @input="data.parent.selectItem(data.item.Name)"
               >
-                  <v-avatar :color="checkIcon(data.item) ? 'grey': null">
-                    <img v-if="!checkIcon(data.item)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item}.png`">
-                    <strong class="white--text headline" v-if="checkIcon(data.item)">F</strong>
+                  <v-avatar :color="checkIcon(data.item.Name) ? 'grey': null">
+                    <img v-if="!checkIcon(data.item.Name)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item.Name}.png`">
+                    <strong class="white--text headline" v-if="checkIcon(data.item.Name)">F</strong>
                   </v-avatar>
                   <span class="selectText">
-                    {{ data.item | swapSpace}}
+                    {{ data.item.Name | swapSpace}}
                   </span>
               </template>
 
@@ -367,12 +376,12 @@
                   <v-list-tile-content>Item{{data.item}}</v-list-tile-content>
                 </template> -->
                 <template>
-                  <v-list-tile-avatar :color="checkIcon(data.item) ? 'grey': null">
-                      <img v-if="!checkIcon(data.item)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item}.png`">
-                      <strong class="white--text headline" v-if="checkIcon(data.item)">{{data.item | firstLetter}}</strong>
+                  <v-list-tile-avatar :color="checkIcon(data.item.Name) ? 'grey': null">
+                      <img v-if="!checkIcon(data.item.Name)" :src="`https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_${data.item.Name}.png`">
+                      <strong class="white--text headline" v-if="checkIcon(data.item.Name)">{{data.item.Name | firstLetter}}</strong>
                   </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{data.item | swapSpace}}</v-list-tile-title>
+                  <v-list-tile-content >
+                    <v-list-tile-title>{{data.item.Name | swapSpace }}</v-list-tile-title>
                     <!-- <v-list-tile-sub-title v-html="data.item.Faction"></v-list-tile-sub-title> -->
                   </v-list-tile-content>
                 </template>
@@ -450,7 +459,7 @@
               dark
               outline
               color="blue-grey lighten-2"
-              label="Role"
+              label="Class"
               clearable
 
               single-line
@@ -527,7 +536,8 @@ export default {
   Campaign:"",
   ClasssList:['Tank','Melee',	'Ranged',	'Rogue',	'Caster',	'Healer', 'Boss'],
   CampaignList:['Light', 'Dark'],
-  FactionList:['Arekhon_Undead','Barbarians','Beastmen','Changelings', 'Dark_Elves', 'Demons', 'Dragonkin','Druids','Dwarves', 'Elves','Knights_of_the_Council', 'Kobolds',"Ra'Archne", "Shaggy_Pygmies", "Wild_Elves"],
+  FactionList:['Loading'],
+  // FactionList:['Arekhon_Undead','Barbarians','Beastman','Changelings', 'Dark_Elves', 'Demons', 'Dragonkin','Druids','Dwarves', 'Elves','Knights_of_the_Council', 'Kobolds',"Ra'Archne", "Shaggy_Pygmies", "Wild_Elves"],
   noFactionIcon:['Changelings', 'Dark_Elves', 'Knights_of_the_Council', "Shaggy_Pygmies", "Wild_Elves", "Unaligned"],
   markData : markJSON,
   removeMarkData : removeMarkJSON,
@@ -580,8 +590,8 @@ computed: {
     // console.log(Hero, Faction, Role, Campaign, marks);
     return this.marks
       .filter(mark => mark.Hero.toLowerCase().indexOf(Hero.toLowerCase()) > -1)
-      .filter(mark => Faction != '' ? mark.Faction === Faction : mark)
-      .filter(mark => Classs != '' ? mark.Class === Classs : mark)
+      .filter(mark => Faction != '' ? mark.FactionMark === Faction : mark)
+      .filter(mark => Classs != '' ? mark.ClassMark === Classs : mark)
       .filter(mark => Campaign != '' ? mark.Campaign === Campaign : mark)
 
     },
@@ -601,7 +611,8 @@ created(){
 firestore () {
   return {
     marks: db.collection('marks').orderBy('Name'),
-    triggers: db.collection('triggers').orderBy('Hero')
+    triggers: db.collection('triggers').orderBy('Hero'),
+    FactionList: db.collection('factions').orderBy('Name')
 
   }
 },
@@ -637,6 +648,10 @@ watch:{
 
     > .flex{
       margin-right: 20px;
+    }
+    .filter-label{
+      color: yellow;
+      opacity: .7;
     }
     .v-text-field__details{
       display: none;
