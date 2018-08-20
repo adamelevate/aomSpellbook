@@ -18,8 +18,8 @@
         >
         <router-link v-for="(nav, index) in navigation" :key="index" :to="nav.path">
           <v-btn
-            :color="$route.path === nav.path ? 'indigo darken-4' : 'white'"
-            :class="$route.path === nav.path ? 'light-green accent-4' : null"
+            :color="current == index ? 'indigo darken-4' : 'white'"
+            :class="current == index ? 'light-green accent-4' : null"
             flat
             block
             :value="index"
@@ -39,7 +39,7 @@ export default {
   data (){
     return{
       // mark: []
-      current: 0,
+      current: 9,
       navigation:[
         {
           name: 'Place Marks',
@@ -62,12 +62,9 @@ export default {
   methods: {
     getIndex(){
       for (var i = 0; i < this.navigation.length; i++) {
-          this.navigation[i]
+          // console.log('nav', this.$route, this.$route.path, this.navigation[i].path, this.$route.path === this.navigation[i].path);
           if(this.$route.path === this.navigation[i].path){
             this.current = i;
-          }
-          else{
-            this.current = 0;
           }
       }
     }
