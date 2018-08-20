@@ -19,7 +19,8 @@
         </v-flex>
         <v-flex>
           <h3>{{trigger.Skill | swapSpace}}</h3>
-          <small>{{trigger.Hero | swapSpace}}</small>
+          <!-- <small>{{trigger.Hero | swapSpace}}</small> -->
+          <small>{{trigger.Description}}</small>
           <br>
         </v-flex>
         <v-flex class="flex-auto">
@@ -39,9 +40,9 @@
                 <h3>{{trigger.Hero | swapSpace}}</h3>
                 <small>{{trigger.Class}} | {{trigger.Faction | swapSpace}}</small>
               </div>
-              <div>
+              <!-- <div>
                 {{trigger.Description}}
-              </div>
+              </div> -->
               <v-layout v-if="trigger.AdditionalEffect" class="AdditionalEffect">
                 <v-flex class="flex-auto">
                   <v-avatar size="28" color="gray" class="additionalMark">
