@@ -1,7 +1,15 @@
 <template>
   <div id="trigger-container" :class="{'dektop': $mq == 'md' || $mq =='lg'}">
     <div class="card">
-      <v-layout @click="toggle(trigger)" class="trigger" wrap align-center justify-space-between v-for="(trigger, index) in filteredTriggers" :key="trigger" :class="{'opened':trigger.clicked}">
+      <v-layout
+        @click="toggle(trigger)"
+        :data-target="'#trigger'+index"
+        class="trigger"
+        wrap align-center justify-space-between
+        v-for="(trigger, index) in filteredTriggers"
+        :key="index"
+        :class="{'opened':trigger.clicked}"
+        >
         <v-flex class="portrait flex-auto">
           <v-avatar size="60" class="skillMark">
             <img class="portrait"  @error="imageLoadError" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/skills/'+trigger.Skill+'.png'">
