@@ -2,7 +2,7 @@
 
 A project to show/discover the Marks game mechanic of a fun IOS game I play: Age of Magic
 
-[Age od Magic: Spellbook](https://aom-spellbook.firebaseapp.com/#/)
+[Age of Magic: Spellbook](https://aom-spellbook.firebaseapp.com/#/)
 
 ## Project setup
 ```
