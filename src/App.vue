@@ -1,5 +1,7 @@
 <template>
-  <div id="app">
+  <div class="">
+
+
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
@@ -14,8 +16,7 @@
           <navigation></navigation>
         </v-flex>
       </v-layout>
-
-      <router-view/>
+      <router-view></router-view>
       <footer>
         <v-layout align-center justify-center>
 
@@ -26,16 +27,28 @@
       </v-layout>
       </footer>
     </v-app>
-  </div>
+</div>
 </template>
 
 
 <script>
 import navigation from '@/components/nav.vue'
+import markJSON from '@/components/Marks.json'
+import triggerMarkJSON from '@/components/Triggers.json'
+import removeMarkJSON from '@/components/removeMarks.json'
+
 export default {
   components: {
-    navigation
+    navigation,
+    markJSON,
+    triggerMarkJSON,
+    removeMarkJSON
   },
+  created(){
+    this.$store.commit('setMarks', markJSON)
+    this.$store.commit('setRemoveMarks', removeMarkJSON)
+    this.$store.commit('setTriggers', triggerMarkJSON)
+  }
 }
 
 </script>

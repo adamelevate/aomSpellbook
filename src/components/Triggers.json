@@ -377,7 +377,7 @@
    "Faction": "Beastmen",
    "Campaign": "Dark",
    "Skill": "Yo_Fatty!",
-   "TriggerFaction": "Beastman",
+   "TriggerFaction": "Beastmen",
    "TriggerClass": "Rogue",
    "AdditionalEffect": "If targets have the Beastman mark, then they can only use a single ability with the longest cooldown time on their next turn.",
    "Affects": "All Enemies",
@@ -445,7 +445,7 @@
  },
  {
    "Hero": "Sharazar",
-   "Class": "Rouge",
+   "Class": "Rogue",
    "Faction": "Changelings",
    "Campaign": "Dark",
    "Skill": "Raven_Eyes",
@@ -457,7 +457,7 @@
  },
  {
    "Hero": "Sharazar",
-   "Class": "Rouge",
+   "Class": "Rogue",
    "Faction": "Changelings",
    "Campaign": "Dark",
    "Skill": "Soaring_Blade",
@@ -469,7 +469,7 @@
  },
  {
    "Hero": "Sharazar",
-   "Class": "Rouge",
+   "Class": "Rogue",
    "Faction": "Changelings",
    "Campaign": "Dark",
    "Skill": "Two_Blades",
@@ -1081,7 +1081,7 @@
  },
  {
    "Hero": "Kage",
-   "Class": "Rouge",
+   "Class": "Rogue",
    "Faction": "Elves",
    "Campaign": "Light",
    "Skill": "",

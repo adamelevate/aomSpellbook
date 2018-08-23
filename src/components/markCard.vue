@@ -69,7 +69,7 @@ export default {
       this.dialogMark = [];
     },
     checkWidth(mq){
-      console.log('$mq', mq);
+      // console.log('$mq', mq);
       if(mq=='md'){
           return 800
       }

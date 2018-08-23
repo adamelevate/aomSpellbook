@@ -510,23 +510,41 @@
 </template>
 
 <script>
-// @ is an alias to /src
 
-import markCard from '@/components/markCard.vue'
+// @ is an alias to /src
+// import { db } from '@/main' //firebase
 import markJSON from '@/components/Marks.json'
-import triggerMarkJSON from '@/components/Triggers.json'
-import removeMarkJSON from '@/components/removeMarks.json'
-import { db } from '@/main'
+import markCard from '@/components/markCard.vue'
 
 export default {
   name: 'home',
   components: {
     markCard,
+    markJSON
+  },
+  computed:{
+      marks: function(){
+        // console.log('this mark', this);
+        return this.$store.getters.getMarks
+      },
+      triggers(){
+        return this.$store.getters.getTriggers
+      },
+    filteredMarks () {
+      const { Hero, Faction, Classs, Campaign } = this
+      // console.log(Hero, Faction, Role, Campaign, marks);
+      return this.marks
+        .filter(mark => mark.Hero.toLowerCase().indexOf(Hero.toLowerCase()) > -1)
+        .filter(mark => Faction != '' ? mark.FactionMark === Faction : mark)
+        .filter(mark => Classs != '' ? mark.ClassMark === Classs : mark)
+        .filter(mark => Campaign != '' ? mark.Campaign === Campaign : mark)
+
+      },
   },
   data (){
     return{
-  marks: [],
-  triggers: [],
+  // marks: [], // maybe we don't need firebase
+  // triggers: [], // maybe we don't need firebase
   dialog: false,
   dialogMark: [],
   //filters
@@ -536,13 +554,12 @@ export default {
   Campaign:"",
   ClasssList:['Tank','Melee',	'Ranged',	'Rogue',	'Caster',	'Healer', 'Boss'],
   CampaignList:['Light', 'Dark'],
-  FactionList:['Loading'],
-  // FactionList:['Arekhon_Undead','Barbarians','Beastman','Changelings', 'Dark_Elves', 'Demons', 'Dragonkin','Druids','Dwarves', 'Elves','Knights_of_the_Council', 'Kobolds',"Ra'Archne", "Shaggy_Pygmies", "Wild_Elves"],
+  // FactionList:['Loading'], // maybe we don't need firebase
+  FactionList: [{'Name':'Arekhon_Undead'},{'Name':'Barbarians'},{'Name':'Beastmen'},{'Name':'Changelings'},{'Name':'Dark_Elves'},{'Name':'Demons'},{'Name':'Dragonkin'},{'Name':'Druids'},{'Name':'Dwarves'},
+  {'Name':'Elves'},
+  {'Name':'Knights_of_the_Council'},{'Name':'Kobolds'},
+  {'Name':"Ra'Archne"},{'Name':'Shaggy_Pygmies'},{'Name':'Wild_Elves'}],
   noFactionIcon:['Changelings', 'Dark_Elves', 'Knights_of_the_Council', "Shaggy_Pygmies", "Wild_Elves", "Unaligned"],
-  markData : markJSON,
-  removeMarkData : removeMarkJSON,
-  triggerMarkData : triggerMarkJSON,
-  triggerData: [],
   menu:false
 }},
 methods:{
@@ -553,9 +570,9 @@ methods:{
     // for (var i = 0; i < this.removeMarkData.length; i++) {
     //   db.collection('removeMarks').add(this.removeMarkData[i])
     // }
-    for (var i = 0; i < this.triggerMarkData.length; i++) {
-      db.collection('triggers').add(this.triggerMarkData[i])
-    }
+    // for (var i = 0; i < this.triggerMarkData.length; i++) {
+    //   db.collection('triggers').add(this.triggerMarkData[i])
+    // }
   },
   checkIcon(e){
     // console.log(e);
@@ -584,18 +601,6 @@ methods:{
     }
   }
 },
-computed: {
-  filteredMarks () {
-    const { Hero, Faction, Classs, Campaign } = this
-    // console.log(Hero, Faction, Role, Campaign, marks);
-    return this.marks
-      .filter(mark => mark.Hero.toLowerCase().indexOf(Hero.toLowerCase()) > -1)
-      .filter(mark => Faction != '' ? mark.FactionMark === Faction : mark)
-      .filter(mark => Classs != '' ? mark.ClassMark === Classs : mark)
-      .filter(mark => Campaign != '' ? mark.Campaign === Campaign : mark)
-
-    },
-},
 filters:{
   swapSpace: function(e){
     // console.log('e',e);
@@ -606,22 +611,16 @@ filters:{
   }
 },
 created(){
-  // console.log('loaded', this.markData, this.removeMarkData);
-},
-firestore () {
-  return {
-    marks: db.collection('marks').orderBy('Name'),
-    triggers: db.collection('triggers').orderBy('Hero'),
-    FactionList: db.collection('factions').orderBy('Name')
 
-  }
 },
-watch:{
-  triggers: function(val, old){
-    // console.log('val, old', val, old);
-    this.$store.commit('setTriggers', val)
-  }
-}
+// firestore () {
+//   return {
+//     // marks: db.collection('marks').orderBy('Name'),
+//     // triggers: db.collection('triggers').orderBy('Hero'),
+//     // FactionList: db.collection('factions').orderBy('Name')
+//   }
+// },
+
 }
 </script>
 

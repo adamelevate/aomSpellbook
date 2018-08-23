@@ -23,7 +23,7 @@
    "HeroLvl": "20",
    "EquipLvl": "3",
    "FactionMark": "",
-   "ClassMark": "Rouge",
+   "ClassMark": "Rogue",
    "Affects": "Target",
    "Description": "If the enemy is attacked by a Rogue, the target will be receiving double damage for the next 2 turns by any resurrected character."
  },
@@ -134,7 +134,7 @@
    "SkillLvl": "5",
    "HeroLvl": "30",
    "EquipLvl": "4",
-   "FactionMark": "Beastman",
+   "FactionMark": "Beastmen",
    "ClassMark": "",
    "Affects": "Target",
    "Description": ""
@@ -144,7 +144,7 @@
    "Class": "Boss",
    "Faction": "Demons",
    "Campaign": "Dark",
-   "Name": "Soulburn",
+   "Name": "Abyss_Blade",
    "SkillLvl": "3",
    "HeroLvl": "10",
    "EquipLvl": "2",

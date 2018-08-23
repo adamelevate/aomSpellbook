@@ -499,12 +499,14 @@ import { db } from '@/main'
 export default {
   name: 'removeMarks',
   components: {
-    markCard
+    markCard,
   },
+
   data (){
     return{
 
-  marks: [],
+  // marks: [],
+  // marks:removeMarkJSON,
   menu: false,
   //filters
   Classs: "",
@@ -513,8 +515,11 @@ export default {
   CampaignList:['Light', 'Dark'],
   Hero: "",
   Faction: "",
-  FactionList: ['Loading'],
-  // FactionList:['Arekhon_Undead','Barbarians','Beastmen','Changelings', 'Dark_Elves', 'Demons', 'Dragonkin','Druids','Dwarves', 'Elves','Knights_of_the_Council', 'Kobolds',"Ra'Archne", "Shaggy_Pygmies", "Wild_Elves"],
+  // FactionList: ['Loading'],
+  FactionList: [{'Name':'Arekhon_Undead'},{'Name':'Barbarians'},{'Name':'Beastmen'},{'Name':'Changelings'},{'Name':'Dark_Elves'},{'Name':'Demons'},{'Name':'Dragonkin'},{'Name':'Druids'},{'Name':'Dwarves'},
+  {'Name':'Elves'},
+  {'Name':'Knights_of_the_Council'},{'Name':'Kobolds'},
+  {'Name':"Ra'Archne"},{'Name':'Shaggy_Pygmies'},{'Name':'Wild_Elves'}],
   noFactionIcon:['Changelings', 'Dark_Elves', 'Knights_of_the_Council', "Shaggy_Pygmies", "Wild_Elves", "Unaligned"],
 
 }},
@@ -562,6 +567,9 @@ computed: {
       .filter(mark => Campaign != '' ? mark.Campaign === Campaign : mark)
 
     },
+    marks: function(){
+      return this.$store.getters.getRemoveMarks
+    }
 },
 filters:{
   swapSpace: function(e){
@@ -572,12 +580,12 @@ filters:{
     return e.charAt(0);
   }
 },
-firestore () {
-  return {
-    marks: db.collection('removeMarks').orderBy('Name'),
-    FactionList: db.collection('factions').orderBy('Name')
-  }
-},
+// firestore () {
+//   return {
+//     marks: db.collection('removeMarks').orderBy('Name'),
+//     FactionList: db.collection('factions').orderBy('Name')
+//   }
+// },
 }
 </script>
 

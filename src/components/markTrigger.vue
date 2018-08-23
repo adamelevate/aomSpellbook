@@ -17,11 +17,22 @@
             <!-- <span>{{mark.Name | firstLetter}}</span> -->
           </v-avatar>
         </v-flex>
-        <v-flex>
+        <v-flex xs9>
           <h3>{{trigger.Skill | swapSpace}}</h3>
           <!-- <small>{{trigger.Hero | swapSpace}}</small> -->
-          <small>{{trigger.Description}}</small>
-          <br>
+          <small v-if="mark.ClassMark">{{trigger.Description}}</small>
+          <p v-if="mark.FactionMark">{{trigger.AdditionalEffect}}</p>
+          <v-layout v-if="trigger.AdditionalEffect && trigger.TriggerClass && !trigger.TriggerFaction" class="AdditionalEffect" >
+            <v-flex class="flex-auto">
+              <v-avatar size="28" color="gray" class="additionalMark">
+                <img v-if="trigger.TriggerFaction" class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_'+trigger.TriggerFaction+'.png'">
+                <v-icon v-else color="green">add_circle_outline</v-icon>
+              </v-avatar>
+            </v-flex>
+            <v-flex>
+              {{trigger.AdditionalEffect}}
+            </v-flex>
+        </v-layout>
         </v-flex>
         <v-flex class="flex-auto">
           <v-icon v-if="!trigger.clicked" size="30" class="showMore" flat color="white">keyboard_arrow_down</v-icon>
@@ -35,7 +46,7 @@
                 <img class="" v-on:load="checkImage" v-show="imageLoaded" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/heros/'+trigger.Hero+'.jpg'">
               </v-avatar>
             </v-flex>
-            <v-flex>
+            <v-flex xs10>
               <div class="">
                 <h3>{{trigger.Hero | swapSpace}}</h3>
                 <small>{{trigger.Class}} | {{trigger.Faction | swapSpace}}</small>
@@ -43,17 +54,7 @@
               <!-- <div>
                 {{trigger.Description}}
               </div> -->
-              <v-layout v-if="trigger.AdditionalEffect" class="AdditionalEffect">
-                <v-flex class="flex-auto">
-                  <v-avatar size="28" color="gray" class="additionalMark">
-                    <img v-if="trigger.TriggerFaction" class="portrait" :src="'https://s3.us-east-2.amazonaws.com/aom-spellbook/factions/Icon_Faction_'+trigger.TriggerFaction+'.png'">
-                    <v-icon v-else color="green">add_circle_outline</v-icon>
-                  </v-avatar>
-                </v-flex>
-                <v-flex>
-                  {{trigger.AdditionalEffect}}
-                </v-flex>
-            </v-layout>
+
           </v-flex>
             <!-- end addtl -->
           </v-layout>
@@ -68,12 +69,12 @@ export default {
   name: 'markTrigger',
   props: ['mark'],
   computed: {
-    triggers () {
-      return this.$store.getters.triggers
+    triggers: function() {
+      return this.$store.getters.getTriggers
     },
     filteredTriggers () {
       const {} = this
-      // console.log('triggers, mark',this.mark);
+      // console.log('triggers, mark', this.triggers, this.mark);
       return this.triggers
       .filter(trigger => this.mark.ClassMark!='' ? trigger.TriggerClass === this.mark.ClassMark : trigger)
       .filter(trigger => this.mark.FactionMark!='' ? trigger.TriggerFaction === this.mark.FactionMark: trigger)
@@ -113,8 +114,8 @@ export default {
       // this.imgErrors[index + kind] = true
     },
     checkimgErrors(index, kind){
-      console.log('check image error', index, kind);
-      console.log('check this///', this.imgErrors[index + kind] != undefined);
+      // console.log('check image error', index, kind);
+      // console.log('check this///', this.imgErrors[index + kind] != undefined);
       this.imgErrors[index + kind] != undefined ? true : false;
     }
   },
@@ -187,10 +188,15 @@ export default {
       }
     }
     .skillMark{
-      margin-right: 8px;
+      margin-right: 12px;
     }
     h3{
-      line-height: 12px;
+      line-height: 22px;
+    }
+    p{
+    margin-bottom: 0!important;
+    font-size: 13px!important;
+    line-height: 17px!important;
     }
     small{
       opacity: .6;

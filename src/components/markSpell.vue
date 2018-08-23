@@ -76,12 +76,17 @@
 </template>
 
 <script>
-
 import markTrigger from '@/components/markTrigger.vue'
+
 export default {
   name: 'markSpell',
   components:{
-    markTrigger
+    markTrigger,
+  },
+  computed:{
+    triggers: function() {
+        return this.$store.getters.getTriggers
+      }
   },
   props: ['mark'],
   data (){
