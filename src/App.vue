@@ -10,7 +10,6 @@
       <v-layout wrap row align-center justify-space-between class="navigation-container">
         <v-flex class="flex-auto logo-container" xs12 sm12 :class="{'mobile': $mq == 'xs' || $mq == 'sm'}">
           <img class="logo" src="@/assets/logo.png" alt="">
-          FUCK
         </v-flex>
         <v-flex class="flex-auto navTitle">
           <navigation></navigation>
