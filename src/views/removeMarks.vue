@@ -505,8 +505,6 @@ export default {
   data (){
     return{
 
-  // marks: [],
-  // marks:removeMarkJSON,
   menu: false,
   //filters
   Classs: "",
@@ -580,12 +578,7 @@ filters:{
     return e.charAt(0);
   }
 },
-// firestore () {
-//   return {
-//     marks: db.collection('removeMarks').orderBy('Name'),
-//     FactionList: db.collection('factions').orderBy('Name')
-//   }
-// },
+
 }
 </script>
 

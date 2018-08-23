@@ -108,7 +108,7 @@
    "EquipLvl": "4",
    "FactionMark": "Barbarians",
    "ClassMark": "",
-   "Affects": "Target",
+   "Affects": "All Enemies",
    "Description": ""
  },
  {

@@ -610,16 +610,6 @@ filters:{
     return e.charAt(0);
   }
 },
-created(){
-
-},
-// firestore () {
-//   return {
-//     // marks: db.collection('marks').orderBy('Name'),
-//     // triggers: db.collection('triggers').orderBy('Hero'),
-//     // FactionList: db.collection('factions').orderBy('Name')
-//   }
-// },
 
 }
 </script>
