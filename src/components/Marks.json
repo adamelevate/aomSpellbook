@@ -316,7 +316,7 @@
    "SkillLvl": "5",
    "HeroLvl": "30",
    "EquipLvl": "4",
-   "FactionMark": "Kobold",
+   "FactionMark": "Kobolds",
    "ClassMark": "",
    "Affects": "Target",
    "Description": "The skill has also a chance to taunt another random enemy for each alive Kobold in the squad (including Kobold Guard himself)."
@@ -330,7 +330,7 @@
    "SkillLvl": "5",
    "HeroLvl": "30",
    "EquipLvl": "4",
-   "FactionMark": "Kobold",
+   "FactionMark": "Kobolds",
    "ClassMark": "",
    "Affects": "All Enemies",
    "Description": ""
@@ -347,7 +347,7 @@
    "FactionMark": "",
    "ClassMark": "Rogue",
    "Affects": "All Enemies",
-   "Description": ""
+   "Description": "Put's a Rogue class mark on the target. After an attack by a Rogue, the target will ONLY be able to attack the enemy with the highest number of hit points for 2 turns."
  },
  {
    "Hero": "Wyrm_Priest",

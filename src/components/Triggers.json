@@ -91,9 +91,9 @@
    "Skill": "Shadow_Judgement",
    "TriggerFaction": "",
    "TriggerClass": "Rogue",
-   "AdditionalEffect": "Also marks target with: Arekhon Undead mark",
+   "AdditionalEffect": "",
    "Affects": "Target",
-   "Description": "Forces the target to skip their next turn"
+   "Description": "Unknown... Need better documentation"
  },
  {
    "Hero": "Arekhon_Shadow",
